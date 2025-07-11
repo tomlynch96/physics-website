@@ -11,7 +11,7 @@ This website is organized into chapters, each containing multiple pages. You can
 
 ## Chapters
 
-- **Chapter 1**: Introduction and basics
+- **[Chapter 1](/physics-website/chapters/chapter-1/)**: Introduction and basics
 - More chapters coming soon...
 
 Use the navigation menu to explore the content!

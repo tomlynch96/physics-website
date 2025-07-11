@@ -21,5 +21,5 @@ Add your main content here. This framework makes it easy to focus on writing whi
 ---
 
 **Navigation:**
-- [Back to Chapter 1](../)
-- [Home](../../)
+- [Back to Chapter 1](/physics-website/chapters/chapter-1/)
+- [Home](/physics-website/)
