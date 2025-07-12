@@ -3,24 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or "My Website" }}</title>
+    <title>{{ title or "Physics Website" }}</title>
     <link rel="stylesheet" href="/physics-website/css/style.css">
 </head>
 <body>
     <header>
-        <nav>
-            <a href="/physics-website/">Home</a>
+        <div class="header-container">
+            <a href="/physics-website/" class="logo">
+                <div class="logo-text">Physics Education</div>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <nav>
+                <a href="/physics-website/" class="active">Home</a>
+                <a href="/physics-website/chapters/chapter-1/">Chapter 1</a>
+                <a href="#">Simulations</a>
+                <a href="#">Resources</a>
+                <a href="#">About</a>
+            </nav>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" onclick="toggleMobileMenu()">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Overlay -->
+        <div class="mobile-nav" id="mobileNav">
+            <a href="/physics-website/" class="active">Home</a>
             <a href="/physics-website/chapters/chapter-1/">Chapter 1</a>
-        </nav>
+            <a href="#">Simulations</a>
+            <a href="#">Resources</a>
+            <a href="#">About</a>
+        </div>
     </header>
 
     <main>
-        <h1>{{ title }}</h1>
-        {{ content }}
+        <!-- Hero section for homepage only -->
+        {% if page.url == "/" %}
+        <section class="hero">
+            <div class="floating-equations">
+                <div class="equation">F = ma</div>
+                <div class="equation">E = mc²</div>
+                <div class="equation">F = kx</div>
+                <div class="equation">P = IV</div>
+                <div class="equation">λ = v/f</div>
+            </div>
+            <div class="hero-content">
+                <h1>{{ title or "Advanced Physics Education Platform" }}</h1>
+                <p class="subtitle">Comprehensive learning resources and interactive simulations designed for deep understanding of fundamental physics principles.</p>
+                <a href="/physics-website/chapters/chapter-1/" class="cta-button">
+                    <span>Start Learning</span>
+                    <span>→</span>
+                </a>
+            </div>
+        </section>
+        {% else %}
+        <!-- Regular page content -->
+        <div class="content-block">
+            <h1>{{ title }}</h1>
+            {{ content | safe }}
+        </div>
+        {% endif %}
     </main>
 
     <footer>
-        <p>&copy; 2025 My Website</p>
+        <p>&copy; 2025 Physics Education Platform. Built for academic excellence.</p>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            mobileNav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (mobileNav.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMobileMenu();
+            });
+        });
+
+        // Close mobile menu when resizing to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                const mobileNav = document.getElementById('mobileNav');
+                const menuToggle = document.querySelector('.menu-toggle');
+                
+                mobileNav.classList.remove('active');
+                menuToggle.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
 </body>
 </html>
