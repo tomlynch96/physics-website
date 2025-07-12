@@ -14,7 +14,7 @@ In this chapter, we'll cover:
 
 ## Pages in This Chapter
 
-- [Page 1: First Topic](page-1/)
+- [Page 1: First Topic](/physics-website/chapters/chapter-1/page-1/)
 - More pages coming soon...
 
 Navigate through the pages to learn more!
