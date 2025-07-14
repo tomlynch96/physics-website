@@ -15,11 +15,23 @@
             
             <!-- Desktop Navigation -->
             <nav>
-                <a href="/physics-website/" class="active">Home</a>
-                <a href="/physics-website/chapters/chapter-1/">Chapter 1</a>
-                <a href="#">Simulations</a>
-                <a href="#">Resources</a>
-                <a href="#">About</a>
+                <div class="nav-item">
+                    <a href="/physics-website/" class="active">Home</a>
+                </div>
+                <div class="nav-item">
+                    <button class="dropdown-toggle" onclick="toggleDropdown(this)">
+                        Chapters
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
+                        <a href="/physics-website/chapters/chapter-2/">Chapter 2: Coming Soon</a>
+                        <a href="/physics-website/chapters/chapter-3/">Chapter 3: Coming Soon</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="/physics-website/about/">About Us</a>
+                </div>
             </nav>
             
             <!-- Mobile Menu Toggle -->
@@ -32,11 +44,22 @@
         
         <!-- Mobile Navigation Overlay -->
         <div class="mobile-nav" id="mobileNav">
-            <a href="/physics-website/" class="active">Home</a>
-            <a href="/physics-website/chapters/chapter-1/">Chapter 1</a>
-            <a href="#">Simulations</a>
-            <a href="#">Resources</a>
-            <a href="#">About</a>
+            <div class="nav-item">
+                <a href="/physics-website/" class="active">Home</a>
+            </div>
+            <div class="nav-item">
+                <button class="mobile-dropdown-toggle" onclick="toggleMobileDropdown(this)">
+                    Chapters ▼
+                </button>
+                <div class="mobile-dropdown">
+                    <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
+                    <a href="/physics-website/chapters/chapter-2/">Chapter 2: Coming Soon</a>
+                    <a href="/physics-website/chapters/chapter-3/">Chapter 3: Coming Soon</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a href="/physics-website/about/">About Us</a>
+            </div>
         </div>
     </header>
 
@@ -91,11 +114,50 @@
             }
         }
 
+        function toggleDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            const isActive = button.classList.contains('active');
+            
+            // Close all dropdowns
+            document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                toggle.classList.remove('active');
+            });
+            
+            // Toggle current dropdown
+            if (!isActive) {
+                button.classList.add('active');
+            }
+        }
+
+        function toggleMobileDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            const isActive = dropdown.classList.contains('active');
+            
+            // Close all mobile dropdowns
+            document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+            
+            // Toggle current dropdown
+            if (!isActive) {
+                dropdown.classList.add('active');
+            }
+        }
+
         // Close mobile menu when clicking on a link
         document.querySelectorAll('.mobile-nav a').forEach(link => {
             link.addEventListener('click', () => {
                 toggleMobileMenu();
             });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-item')) {
+                document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                    toggle.classList.remove('active');
+                });
+            }
         });
 
         // Close mobile menu when resizing to desktop
