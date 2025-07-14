@@ -1,4 +1,4 @@
-/* Executive-Level Physics Website CSS */
+/* Executive-Level Physics Website CSS - Full Width Version */
 * {
     margin: 0;
     padding: 0;
@@ -28,6 +28,12 @@ body {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container class for content width control */
+.container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px;
@@ -56,7 +62,6 @@ header {
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
     z-index: 100;
-    margin: 0 -24px;
 }
 
 .header-container {
@@ -281,6 +286,9 @@ main {
 .hero-content {
     position: relative;
     z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
 /* Floating physics equations */
@@ -381,9 +389,12 @@ main {
 
 .section:nth-child(even) {
     background: var(--surface-variant);
-    margin: 0 -24px;
-    padding-left: 24px;
-    padding-right: 24px;
+}
+
+.section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
 h1 {
@@ -510,6 +521,7 @@ h3 {
 .content-block {
     max-width: 800px;
     margin: 48px auto;
+    padding: 0 24px;
 }
 
 p {
@@ -623,9 +635,13 @@ footer {
     border-top: 1px solid var(--border);
     padding: 48px 0;
     text-align: center;
-    margin: 80px -24px 0 -24px;
-    padding-left: 24px;
-    padding-right: 24px;
+    margin-top: 80px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
 footer p {
@@ -636,11 +652,12 @@ footer p {
 
 /* Responsive */
 @media (max-width: 768px) {
-    body {
-        padding: 0 16px;
-    }
-    
-    .header-container {
+    .container,
+    .header-container,
+    .hero-content,
+    .content-block,
+    .section-content,
+    .footer-content {
         padding: 0 16px;
     }
     
@@ -666,12 +683,6 @@ footer p {
         padding: 48px 0;
     }
     
-    .section:nth-child(even) {
-        margin: 0 -16px;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-    
     .chapter-grid {
         grid-template-columns: 1fr;
         gap: 24px;
@@ -692,9 +703,7 @@ footer p {
     }
     
     footer {
-        margin: 60px -16px 0 -16px;
-        padding-left: 16px;
-        padding-right: 16px;
+        margin-top: 60px;
     }
 }
 
