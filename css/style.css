@@ -867,3 +867,173 @@ button:focus {
     background: var(--primary);
     color: white;
 }
+/* Expandable Cards Section */
+
+.expandables-section {
+    padding: 80px 0;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 64px auto;
+}
+
+.expandables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.expandable-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow);
+}
+
+.expandable-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.card-header {
+    padding: 24px;
+    background: var(--surface);
+    position: relative;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.card-preview {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.expand-icon {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--primary);
+    transition: transform 0.3s ease;
+}
+
+.card-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--surface-variant);
+}
+
+.card-content-inner {
+    padding: 24px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.expandable-card.expanded .card-content {
+    max-height: 400px;
+}
+
+.expandable-card.expanded .expand-icon {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.expandable-card.expanded .card-header {
+    background: var(--surface-variant);
+}
+
+/* CTA Section - ADD THIS TO YOUR CSS/STYLE.CSS */
+
+.cta-section {
+    padding: 80px 0;
+    background: var(--surface-variant);
+    text-align: center;
+}
+
+.cta-title {
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 24px;
+}
+
+.cta-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+}
+
+/* Update existing .cta-button if needed */
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    padding: 16px 32px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow);
+}
+
+.cta-button:hover {
+    background: var(--primary-dark);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Mobile responsive for expandable cards */
+@media (max-width: 768px) {
+    .expandables-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .card-header {
+        padding: 20px;
+    }
+    
+    .card-content-inner {
+        padding: 20px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .section-subtitle {
+        font-size: 16px;
+    }
+}
