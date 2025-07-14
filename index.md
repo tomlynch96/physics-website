@@ -1,6 +1,6 @@
 ---
-layout: layout.html
-title: "Welcome to My Website"
+layout: landing.html
+title: "Advanced Physics Education Platform"
 ---
 
 Welcome to my chapter-based website! This is the homepage where you can learn about the content and navigate to different chapters.
