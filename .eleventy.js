@@ -5,6 +5,7 @@ module.exports = function(eleventyConfig) {
   // Copy any images if you add them later
   eleventyConfig.addPassthroughCopy("images");
   
+  eleventyConfig.addPassthroughCopy("js");
   // Set custom directories
   return {
     dir: {

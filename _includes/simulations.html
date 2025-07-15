@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "Physics Simulations" }}</title>
+    <link rel="stylesheet" href="/physics-website/css/style.css">
+    <style>
+        /* Simulations page specific styles */
+        .sims-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 48px 0;
+            text-align: center;
+        }
+
+        .sims-header h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .sims-header p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: var(--surface-variant);
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background: var(--surface);
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Simulations Grid */
+        .simulations-section {
+            padding: 48px 0;
+        }
+
+        .simulations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .simulation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .simulation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .simulation-thumbnail {
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simulation-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .simulation-card:hover .simulation-thumbnail::before {
+            left: 100%;
+        }
+
+        .simulation-info {
+            padding: 20px;
+        }
+
+        .simulation-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .simulation-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .simulation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .simulation-category {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .simulation-difficulty {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .simulation-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--surface-variant);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 12px;
+            width: 90%;
+            height: 80%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--surface-variant);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .simulation-container {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simulation-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .control-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            width: 120px;
+        }
+
+        .embed-code-section {
+            background: var(--surface-variant);
+            padding: 16px;
+            border-radius: var(--radius);
+            margin-top: 24px;
+        }
+
+        .embed-code-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .embed-code {
+            background: var(--surface);
+            padding: 12px;
+            border-radius: var(--radius);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Animation for grid items */
+        .simulation-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                justify-content: space-between;
+            }
+
+            .simulations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                height: 90%;
+            }
+
+            .simulation-controls {
+                flex-direction: column;
+            }
+
+            .control-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="/physics-website/" class="logo">
+                <div class="logo-text">Physics Education</div>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <nav>
+                <div class="nav-item">
+                    <a href="/physics-website/">Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="dropdown-toggle">
+                        Chapters
+                        <span class="dropdown-arrow">▼</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
+                        <a href="/physics-website/chapters/chapter-2/">Chapter 2: Fundamentals</a>
+                        <a href="/physics-website/chapters/chapter-3/">Chapter 3: Advanced Topics</a>
+                        <a href="/physics-website/chapters/chapter-4/">Chapter 4: Applications</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="/physics-website/simulations/" class="active">Simulations</a>
+                </div>
+                <div class="nav-item">
+                    <a href="/physics-website/about/">About Us</a>
+                </div>
+            </nav>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" onclick="toggleMobileMenu()">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Overlay -->
+        <div class="mobile-nav" id="mobileNav">
+            <div class="nav-item">
+                <a href="/physics-website/">Home</a>
+            </div>
+            <div class="nav-item">
+                <button class="mobile-dropdown-toggle" onclick="toggleMobileDropdown(this)">
+                    Chapters ▼
+                </button>
+                <div class="mobile-dropdown">
+                    <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
+                    <a href="/physics-website/chapters/chapter-2/">Chapter 2: Fundamentals</a>
+                    <a href="/physics-website/chapters/chapter-3/">Chapter 3: Advanced Topics</a>
+                    <a href="/physics-website/chapters/chapter-4/">Chapter 4: Applications</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a href="/physics-website/simulations/" class="active">Simulations</a>
+            </div>
+            <div class="nav-item">
+                <a href="/physics-website/about/">About Us</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Header -->
+        <div class="sims-header">
+            <div class="container">
+                <h1>Physics Simulations</h1>
+                <p>Interactive simulations for hands-on learning and exploration</p>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="container">
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <span class="filter-label">Category:</span>
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="mechanics">Classical Mechanics</option>
+                            <option value="electromagnetism">Electromagnetism</option>
+                            <option value="quantum">Quantum Mechanics</option>
+                            <option value="thermodynamics">Thermodynamics</option>
+                            <option value="waves">Waves & Optics</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Difficulty:</span>
+                        <select class="filter-select" id="difficultyFilter">
+                            <option value="">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <input type="text" class="search-box" id="searchBox" placeholder="Search simulations...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulations Grid -->
+        <div class="simulations-section">
+            <div class="container">
+                <div class="simulations-grid" id="simulationsGrid">
+                    <!-- Simulation cards will be populated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Physics Education Platform. Built for academic excellence.</p>
+        </div>
+    </footer>
+
+    <!-- Modal for viewing simulations -->
+    <div class="modal" id="simulationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Simulation Title</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="simulation-container" id="simulationContainer">
+                    <div>🔬 Interactive Simulation Loading...</div>
+                </div>
+                
+                <div class="simulation-controls" id="simulationControls">
+                    <!-- Controls will be populated based on simulation type -->
+                </div>
+                
+                <div class="embed-code-section">
+                    <div class="embed-code-title">Embed this simulation in your chapter:</div>
+                    <div class="embed-code" id="embedCode">
+                        <!-- Embed code will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            mobileNav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            
+            if (mobileNav.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        function toggleMobileDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            const isActive = dropdown.classList.contains('active');
+            
+            document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+            
+            if (!isActive) {
+                dropdown.classList.add('active');
+            }
+        }
+
+        // Simulation data
+        const simulations = [
+            {
+                id: 'pendulum',
+                title: 'Simple Pendulum',
+                description: 'Explore the motion of a simple pendulum and understand period, frequency, and energy conservation.',
+                category: 'mechanics',
+                difficulty: 'beginner',
+                icon: '⚖️',
+                controls: [
+                    { name: 'length', label: 'Length (m)', type: 'range', min: 0.5, max: 3.0, step: 0.1, default: 1.0 },
+                    { name: 'angle', label: 'Initial Angle (°)', type: 'range', min: 5, max: 45, step: 1, default: 15 },
+                    { name: 'gravity', label: 'Gravity (m/s²)', type: 'range', min: 1, max: 20, step: 0.1, default: 9.81 }
+                ]
+            },
+            {
+                id: 'wave-interference',
+                title: 'Wave Interference',
+                description: 'Visualize how waves interact through constructive and destructive interference patterns.',
+                category: 'waves',
+                difficulty: 'intermediate',
+                icon: '🌊',
+                controls: [
+                    { name: 'frequency1', label: 'Wave 1 Frequency (Hz)', type: 'range', min: 1, max: 10, step: 0.5, default: 3 },
+                    { name: 'frequency2', label: 'Wave 2 Frequency (Hz)', type: 'range', min: 1, max: 10, step: 0.5, default: 4 },
+                    { name: 'amplitude', label: 'Amplitude', type: 'range', min: 0.1, max: 2.0, step: 0.1, default: 1.0 }
+                ]
+            },
+            {
+                id: 'electric-field',
+                title: 'Electric Field Visualization',
+                description: 'Interactive electric field mapping with customizable charge configurations.',
+                category: 'electromagnetism',
+                difficulty: 'intermediate',
+                icon: '⚡',
+                controls: [
+                    { name: 'charge1', label: 'Charge 1 (μC)', type: 'range', min: -10, max: 10, step: 1, default: 5 },
+                    { name: 'charge2', label: 'Charge 2 (μC)', type: 'range', min: -10, max: 10, step: 1, default: -5 },
+                    { name: 'distance', label: 'Separation (cm)', type: 'range', min: 5, max: 50, step: 1, default: 20 }
+                ]
+            },
+            {
+                id: 'quantum-tunneling',
+                title: 'Quantum Tunneling',
+                description: 'Explore quantum mechanical tunneling through potential barriers.',
+                category: 'quantum',
+                difficulty: 'advanced',
+                icon: '⚛️',
+                controls: [
+                    { name: 'energy', label: 'Particle Energy (eV)', type: 'range', min: 0.1, max: 2.0, step: 0.1, default: 0.8 },
+                    { name: 'barrier_height', label: 'Barrier Height (eV)', type: 'range', min: 0.5, max: 3.0, step: 0.1, default: 1.5 },
+                    { name: 'barrier_width', label: 'Barrier Width (nm)', type: 'range', min: 0.5, max: 5.0, step: 0.1, default: 2.0 }
+                ]
+            },
+            {
+                id: 'heat-transfer',
+                title: 'Heat Transfer Simulation',
+                description: 'Visualize conduction, convection, and radiation heat transfer mechanisms.',
+                category: 'thermodynamics',
+                difficulty: 'intermediate',
+                icon: '🔥',
+                controls: [
+                    { name: 'temperature_hot', label: 'Hot Side (°C)', type: 'range', min: 50, max: 200, step: 5, default: 100 },
+                    { name: 'temperature_cold', label: 'Cold Side (°C)', type: 'range', min: 0, max: 50, step: 5, default: 20 },
+                    { name: 'material', label: 'Material', type: 'select', options: ['Copper', 'Steel', 'Wood', 'Glass'], default: 'Copper' }
+                ]
+            },
+            {
+                id: 'projectile-motion',
+                title: 'Projectile Motion',
+                description: 'Analyze the trajectory of projectiles under various conditions.',
+                category: 'mechanics',
+                difficulty: 'beginner',
+                icon: '🏹',
+                controls: [
+                    { name: 'velocity', label: 'Initial Velocity (m/s)', type: 'range', min: 10, max: 100, step: 5, default: 50 },
+                    { name: 'angle', label: 'Launch Angle (°)', type: 'range', min: 15, max: 75, step: 5, default: 45 },
+                    { name: 'height', label: 'Initial Height (m)', type: 'range', min: 0, max: 50, step: 1, default: 0 }
+                ]
+            }
+        ];
+
+        let filteredSimulations = [...simulations];
+
+        // Initialize the simulations page
+        function initSimulations() {
+            renderSimulations();
+            setupSimulationEventListeners();
+        }
+
+        // Render simulations grid
+        function renderSimulations() {
+            const grid = document.getElementById('simulationsGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+
+            filteredSimulations.forEach((sim, index) => {
+                const card = document.createElement('div');
+                card.className = 'simulation-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="simulation-thumbnail">
+                        <div>${sim.icon}</div>
+                    </div>
+                    <div class="simulation-info">
+                        <h3 class="simulation-title">${sim.title}</h3>
+                        <p class="simulation-description">${sim.description}</p>
+                        <div class="simulation-meta">
+                            <span class="simulation-category">${sim.category}</span>
+                            <span class="simulation-difficulty">${sim.difficulty}</span>
+                        </div>
+                        <div class="simulation-actions">
+                            <button class="btn btn-primary" onclick="openSimulation('${sim.id}')">
+                                <span>Open Simulation</span>
+                                <span>🔬</span>
+                            </button>
+                            <button class="btn btn-secondary" onclick="showEmbedCode('${sim.id}')">
+                                <span>Embed Code</span>
+                                <span>&lt;/&gt;</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Setup event listeners for simulations page
+        function setupSimulationEventListeners() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const difficultyFilter = document.getElementById('difficultyFilter');
+            const searchBox = document.getElementById('searchBox');
+            
+            if (categoryFilter) categoryFilter.addEventListener('change', filterSimulations);
+            if (difficultyFilter) difficultyFilter.addEventListener('change', filterSimulations);
+            if (searchBox) searchBox.addEventListener('input', filterSimulations);
+            
+            // Close modal when clicking outside
+            const modal = document.getElementById('simulationModal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal();
+                    }
+                });
+            }
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        }
+
+        // Filter simulations
+        function filterSimulations() {
+            const category = document.getElementById('categoryFilter')?.value || '';
+            const difficulty = document.getElementById('difficultyFilter')?.value || '';
+            const search = document.getElementById('searchBox')?.value.toLowerCase() || '';
+
+            filteredSimulations = simulations.filter(sim => {
+                const matchesCategory = !category || sim.category === category;
+                const matchesDifficulty = !difficulty || sim.difficulty === difficulty;
+                const matchesSearch = !search || 
+                    sim.title.toLowerCase().includes(search) || 
+                    sim.description.toLowerCase().includes(search);
+                
+                return matchesCategory && matchesDifficulty && matchesSearch;
+            });
+
+            renderSimulations();
+        }
+
+        // Open simulation in modal
+        function openSimulation(simulationId) {
+            const simulation = simulations.find(s => s.id === simulationId);
+            if (!simulation) return;
+
+            const modalTitle = document.getElementById('modalTitle');
+            if (modalTitle) modalTitle.textContent = simulation.title;
+            
+            // Update simulation container
+            const container = document.getElementById('simulationContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">${simulation.icon}</div>
+                        <div style="font-size: 18px;">Interactive ${simulation.title}</div>
+                        <div style="font-size: 14px; opacity: 0.8; margin-top: 8px;">
+                            Simulation controls are active. Adjust parameters below to see changes.
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Generate controls
+            generateControls(simulation);
+            
+            // Generate embed code
+            generateEmbedCode(simulation);
+
+            // Show modal
+            const modal = document.getElementById('simulationModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Generate simulation controls
+        function generateControls(simulation) {
+            const controlsContainer = document.getElementById('simulationControls');
+            if (!controlsContainer) return;
+            
+            controlsContainer.innerHTML = '';
+
+            simulation.controls.forEach(control => {
+                const controlGroup = document.createElement('div');
+                controlGroup.className = 'control-group';
+
+                let inputElement;
+                if (control.type === 'range') {
+                    inputElement = `
+                        <input type="range" 
+                               class="control-input" 
+                               min="${control.min}" 
+                               max="${control.max}" 
+                               step="${control.step}" 
+                               value="${control.default}"
+                               oninput="updateSimulation('${control.name}', this.value)">
+                        <div style="font-size: 12px; color: var(--text-secondary);">
+                            Value: <span id="${control.name}_value">${control.default}</span>
+                        </div>
+                    `;
+                } else if (control.type === 'select') {
+                    inputElement = `
+                        <select class="control-input" onchange="updateSimulation('${control.name}', this.value)">
+                            ${control.options.map(option => 
+                                `<option value="${option}" ${option === control.default ? 'selected' : ''}>${option}</option>`
+                            ).join('')}
+                        </select>
+                    `;
+                }
+
+                controlGroup.innerHTML = `
+                    <label class="control-label">${control.label}</label>
+                    ${inputElement}
+                `;
+
+                controlsContainer.appendChild(controlGroup);
+            });
+        }
+
+        // Update simulation (called when controls change)
+        function updateSimulation(parameter, value) {
+            // Update the displayed value for range inputs
+            const valueDisplay = document.getElementById(`${parameter}_value`);
+            if (valueDisplay) {
+                valueDisplay.textContent = value;
+            }
+
+            // Here you would update the actual simulation
+            console.log(`Updating ${parameter} to ${value}`);
+            
+            // For demo purposes, update the container to show the change
+            const container = document.getElementById('simulationContainer');
+            if (container) {
+                container.style.background = `linear-gradient(45deg, hsl(${Math.random() * 360}, 70%, 60%), hsl(${Math.random() * 360}, 70%, 70%))`;
+            }
+        }
+
+        // Generate embed code
+        function generateEmbedCode(simulation) {
+            const embedCode = `<!-- Physics Simulation Embed -->
+<div class="physics-simulation" data-sim-id="${simulation.id}">
+    <iframe src="/physics-website/simulations/${simulation.id}" 
+            width="100%" 
+            height="400" 
+            frameborder="0"
+            allowfullscreen>
+    </iframe>
+    <div class="simulation-caption">
+        <strong>${simulation.title}</strong> - ${simulation.description}
+    </div>
+</div>
+
+<!-- Add this CSS to your page -->
+<style>
+.physics-simulation {
+    margin: 24px 0;
+    border: 1px solid #e8eaed;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(60, 64, 67, 0.1);
+}
+.simulation-caption {
+    padding: 16px;
+    background: #f8f9fa;
+    font-size: 14px;
+    color: #5f6368;
+}
+</style>`;
+
+            const embedCodeElement = document.getElementById('embedCode');
+            if (embedCodeElement) {
+                embedCodeElement.textContent = embedCode;
+            }
+        }
+
+        // Show embed code quickly
+        function showEmbedCode(simulationId) {
+            const simulation = simulations.find(s => s.id === simulationId);
+            if (!simulation) return;
+
+            generateEmbedCode(simulation);
+            
+            // Copy to clipboard
+            const embedCode = document.getElementById('embedCode')?.textContent;
+            if (embedCode) {
+                navigator.clipboard.writeText(embedCode).then(() => {
+                    alert('Embed code copied to clipboard!');
+                }).catch(() => {
+                    // Fallback: show the code in an alert
+                    alert('Embed code:\n\n' + embedCode);
+                });
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('simulationModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Close mobile menu when clicking on links
+            document.querySelectorAll('.mobile-nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    toggleMobileMenu();
+                });
+            });
+
+            // Close mobile menu when resizing to desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    const mobileNav = document.getElementById('mobileNav');
+                    const menuToggle = document.querySelector('.menu-toggle');
+                    
+                    if (mobileNav) mobileNav.classList.remove('active');
+                    if (menuToggle) menuToggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Initialize simulations page
+            if (document.getElementById('simulationsGrid')) {
+                initSimulations();
+            }
+        });
+    </script>
+</body>
+</html>
