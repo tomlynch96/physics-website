@@ -1,4 +1,80 @@
-@keyframes blink {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "Physics Website" }}</title>
+    <link rel="stylesheet" href="/physics-website/css/style.css">
+    <script src="/physics-website/js/simulations-data.js"></script>
+    <style>
+        /* Landing page specific styles */
+        .hero-landing {
+            padding: 120px 0 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-landing::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(26, 115, 232, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(26, 115, 232, 0.02) 0%, transparent 50%);
+            animation: heroMove 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes heroMove {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(1deg) scale(1.05); }
+        }
+
+        .hero-title-landing {
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            letter-spacing: -1px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-line {
+            display: block;
+            width: 100%;
+        }
+
+        .title-line:first-child {
+            margin-bottom: 16px;
+        }
+
+        .constant-text {
+            color: var(--text-primary);
+        }
+
+        .changing-text {
+            color: var(--primary);
+            font-weight: 500;
+            border-right: 3px solid var(--primary);
+            padding-right: 4px;
+            animation: blink 1.2s infinite;
+            min-width: 2px;
+            display: inline-block;
+            min-height: 1em;
+        }
+
+        @keyframes blink {
             0%, 50% { border-color: var(--primary); }
             51%, 100% { border-color: transparent; }
         }
@@ -685,7 +761,7 @@
                 this.nextBtn = nextBtn;
                 this.playPauseBtn = playPauseBtn;
                 this.currentSlide = 0;
-                this.totalSlides = this.track.children.length;
+                this.totalSlides = this.track ? this.track.children.length : 0;
                 this.startX = 0;
                 this.isDragging = false;
                 this.threshold = 50;
@@ -693,8 +769,10 @@
                 this.autoPlayDelay = 4000;
                 this.isAutoPlaying = true;
                 
-                this.init();
-                this.startAutoPlay();
+                if (this.track && this.totalSlides > 0) {
+                    this.init();
+                    this.startAutoPlay();
+                }
             }
             
             init() {
@@ -707,16 +785,18 @@
                 this.track.addEventListener('mouseup', (e) => this.handleMouseEnd(e));
                 this.track.addEventListener('mouseleave', (e) => this.handleMouseEnd(e));
                 
-                this.prevBtn.addEventListener('click', () => this.prevSlide());
-                this.nextBtn.addEventListener('click', () => this.nextSlide());
-                this.playPauseBtn.addEventListener('click', () => this.toggleAutoPlay());
+                if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prevSlide());
+                if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.nextSlide());
+                if (this.playPauseBtn) this.playPauseBtn.addEventListener('click', () => this.toggleAutoPlay());
                 
-                this.indicators.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('carousel-indicator')) {
-                        const slideIndex = parseInt(e.target.dataset.slide);
-                        this.goToSlide(slideIndex);
-                    }
-                });
+                if (this.indicators) {
+                    this.indicators.addEventListener('click', (e) => {
+                        if (e.target.classList.contains('carousel-indicator')) {
+                            const slideIndex = parseInt(e.target.dataset.slide);
+                            this.goToSlide(slideIndex);
+                        }
+                    });
+                }
                 
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'ArrowLeft') this.prevSlide();
@@ -814,12 +894,19 @@
             }
             
             updateCarousel() {
+                if (!this.track) return;
+                
                 const translateX = -this.currentSlide * 100;
                 this.track.style.transform = `translateX(${translateX}%)`;
                 
-                this.indicators.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
-                    indicator.classList.toggle('active', index === this.currentSlide);
-                });
+                if (this.indicators) {
+                    this.indicators.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                        indicator.classList.toggle('active', index === this.currentSlide);
+                    });
+                }
+                
+                // Update total slides count in case slides were added dynamically
+                this.totalSlides = this.track.children.length;
             }
             
             startAutoPlay() {
@@ -840,10 +927,10 @@
                 
                 if (this.isAutoPlaying) {
                     this.startAutoPlay();
-                    this.playPauseBtn.textContent = '⏸️ Pause Auto-play';
+                    if (this.playPauseBtn) this.playPauseBtn.textContent = '⏸️ Pause Auto-play';
                 } else {
                     this.pauseAutoPlay();
-                    this.playPauseBtn.textContent = '▶️ Start Auto-play';
+                    if (this.playPauseBtn) this.playPauseBtn.textContent = '▶️ Start Auto-play';
                 }
             }
         }
@@ -877,8 +964,8 @@
                     const mobileNav = document.getElementById('mobileNav');
                     const menuToggle = document.querySelector('.menu-toggle');
                     
-                    mobileNav.classList.remove('active');
-                    menuToggle.classList.remove('active');
+                    if (mobileNav) mobileNav.classList.remove('active');
+                    if (menuToggle) menuToggle.classList.remove('active');
                     document.body.style.overflow = '';
                 }
             });
@@ -896,20 +983,25 @@
                 'wave dynamics'
             ];
             
-            new Typewriter(
-                document.getElementById('heroTypewriter'),
-                heroWords,
-                { startDelay: 1000, pauseTime: 2500 }
-            );
+            const typewriterElement = document.getElementById('heroTypewriter');
+            if (typewriterElement) {
+                new Typewriter(
+                    typewriterElement,
+                    heroWords,
+                    { startDelay: 1000, pauseTime: 2500 }
+                );
+            }
             
-            // Initialize carousel
-            const carouselTrack = document.getElementById('carouselTrack');
-            const carouselIndicators = document.getElementById('carouselIndicators');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            
-            new SwipeCarousel(carouselTrack, carouselIndicators, prevBtn, nextBtn, playPauseBtn);
+            // Initialize carousel after slides are generated
+            setTimeout(() => {
+                const carouselTrack = document.getElementById('carouselTrack');
+                const carouselIndicators = document.getElementById('carouselIndicators');
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const playPauseBtn = document.getElementById('playPauseBtn');
+                
+                new SwipeCarousel(carouselTrack, carouselIndicators, prevBtn, nextBtn, playPauseBtn);
+            }, 100);
             
             // Add click listeners to expandable cards
             document.querySelectorAll('.expandable-card').forEach(card => {
@@ -921,80 +1013,3 @@
     </script>
 </body>
 </html>
-            <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or "Physics Website" }}</title>
-    <link rel="stylesheet" href="/physics-website/css/style.css">
-    <script src="/physics-website/js/simulations-data.js"></script>
-    <style>
-        /* Landing page specific styles */
-        .hero-landing {
-            padding: 120px 0 80px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-landing::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 30% 70%, rgba(26, 115, 232, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(26, 115, 232, 0.02) 0%, transparent 50%);
-            animation: heroMove 20s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        @keyframes heroMove {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(1deg) scale(1.05); }
-        }
-
-        .hero-title-landing {
-            font-size: clamp(40px, 5vw, 64px);
-            font-weight: 400;
-            line-height: 1.3;
-            color: var(--text-primary);
-            margin-bottom: 32px;
-            letter-spacing: -1px;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-        }
-
-        .title-line {
-            display: block;
-            width: 100%;
-        }
-
-        .title-line:first-child {
-            margin-bottom: 16px;
-        }
-
-        .constant-text {
-            color: var(--text-primary);
-        }
-
-        .changing-text {
-            color: var(--primary);
-            font-weight: 500;
-            border-right: 3px solid var(--primary);
-            padding-right: 4px;
-            animation: blink 1.2s infinite;
-            min-width: 2px;
-            display: inline-block;
-            min-height: 1em;
-        }
-
-        @key
