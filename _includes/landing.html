@@ -1,79 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or "Physics Website" }}</title>
-    <link rel="stylesheet" href="/physics-website/css/style.css">
-    <style>
-        /* Landing page specific styles */
-        .hero-landing {
-            padding: 120px 0 80px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-landing::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 30% 70%, rgba(26, 115, 232, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(26, 115, 232, 0.02) 0%, transparent 50%);
-            animation: heroMove 20s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        @keyframes heroMove {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(1deg) scale(1.05); }
-        }
-
-        .hero-title-landing {
-            font-size: clamp(40px, 5vw, 64px);
-            font-weight: 400;
-            line-height: 1.3;
-            color: var(--text-primary);
-            margin-bottom: 32px;
-            letter-spacing: -1px;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-        }
-
-        .title-line {
-            display: block;
-            width: 100%;
-        }
-
-        .title-line:first-child {
-            margin-bottom: 16px;
-        }
-
-        .constant-text {
-            color: var(--text-primary);
-        }
-
-        .changing-text {
-            color: var(--primary);
-            font-weight: 500;
-            border-right: 3px solid var(--primary);
-            padding-right: 4px;
-            animation: blink 1.2s infinite;
-            min-width: 2px;
-            display: inline-block;
-            min-height: 1em;
-        }
-
-        @keyframes blink {
+@keyframes blink {
             0%, 50% { border-color: var(--primary); }
             51%, 100% { border-color: transparent; }
         }
@@ -141,22 +66,6 @@
             font-weight: 500;
             text-align: center;
             padding: 40px;
-        }
-
-        .carousel-slide:nth-child(1) {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .carousel-slide:nth-child(2) {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .carousel-slide:nth-child(3) {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .carousel-slide:nth-child(4) {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         }
 
         .slide-title {
@@ -536,30 +445,12 @@
                     <button class="carousel-nav next" id="nextBtn">›</button>
                     
                     <div class="carousel-track" id="carouselTrack">
-                        <div class="carousel-slide">
-                            <div class="slide-title">⚛️ Quantum Mechanics Simulator</div>
-                            <div class="slide-description">Interactive wave function visualization with real-time probability calculations. Explore quantum tunneling, superposition, and measurement effects in an immersive 3D environment.</div>
-                        </div>
-                        <div class="carousel-slide">
-                            <div class="slide-title">🌊 Wave Dynamics Lab</div>
-                            <div class="slide-description">Comprehensive wave physics simulation featuring interference patterns, standing waves, and Doppler effects. Manipulate frequency, amplitude, and medium properties to understand wave behavior.</div>
-                        </div>
-                        <div class="carousel-slide">
-                            <div class="slide-title">⚡ Electromagnetic Field Visualizer</div>
-                            <div class="slide-description">Real-time electromagnetic field mapping with interactive charge placement. Watch electric and magnetic fields evolve dynamically as you modify source configurations.</div>
-                        </div>
-                        <div class="carousel-slide">
-                            <div class="slide-title">🔬 Particle Collision Chamber</div>
-                            <div class="slide-description">High-energy physics simulation allowing you to recreate famous particle experiments. Analyze collision data and discover fundamental particles through interactive detection.</div>
-                        </div>
+                        <!-- Slides will be dynamically generated from simulation data -->
                     </div>
                 </div>
                 
                 <div class="carousel-indicators" id="carouselIndicators">
-                    <div class="carousel-indicator active" data-slide="0"></div>
-                    <div class="carousel-indicator" data-slide="1"></div>
-                    <div class="carousel-indicator" data-slide="2"></div>
-                    <div class="carousel-indicator" data-slide="3"></div>
+                    <!-- Indicators will be dynamically generated -->
                 </div>
                 
                 <div class="carousel-controls">
@@ -700,25 +591,48 @@
             }
         }
 
-        // Close mobile menu when clicking on links
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.mobile-nav a').forEach(link => {
-                link.addEventListener('click', () => {
-                    toggleMobileMenu();
-                });
+        // Generate carousel slides from simulation data
+        function generateCarouselSlides() {
+            const carouselTrack = document.getElementById('carouselTrack');
+            const carouselIndicators = document.getElementById('carouselIndicators');
+            
+            if (!carouselTrack || !carouselIndicators || typeof SimulationUtils === 'undefined') return;
+            
+            const featuredSimulations = SimulationUtils.getFeatured();
+            
+            // Clear existing slides
+            carouselTrack.innerHTML = '';
+            carouselIndicators.innerHTML = '';
+            
+            // Generate slides
+            featuredSimulations.forEach((sim, index) => {
+                // Create slide
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <div class="slide-title">${sim.icon} ${sim.title}</div>
+                    <div class="slide-description">${sim.description}</div>
+                `;
+                
+                // Set gradient based on category
+                const gradients = {
+                    'mechanics': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    'waves': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    'electromagnetism': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                    'quantum': 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                    'thermodynamics': 'linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%)'
+                };
+                
+                slide.style.background = gradients[sim.category] || gradients.mechanics;
+                carouselTrack.appendChild(slide);
+                
+                // Create indicator
+                const indicator = document.createElement('div');
+                indicator.className = `carousel-indicator ${index === 0 ? 'active' : ''}`;
+                indicator.dataset.slide = index;
+                carouselIndicators.appendChild(indicator);
             });
-
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768) {
-                    const mobileNav = document.getElementById('mobileNav');
-                    const menuToggle = document.querySelector('.menu-toggle');
-                    
-                    mobileNav.classList.remove('active');
-                    menuToggle.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-        });
+        }
 
         // Typewriter Effect
         class Typewriter {
@@ -951,14 +865,35 @@
 
         // Initialize everything when DOM loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize typewriter
+            // Close mobile menu when clicking on links
+            document.querySelectorAll('.mobile-nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    toggleMobileMenu();
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    const mobileNav = document.getElementById('mobileNav');
+                    const menuToggle = document.querySelector('.menu-toggle');
+                    
+                    mobileNav.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Generate carousel slides from simulation data
+            generateCarouselSlides();
+            
+            // Initialize typewriter with simulation-related words
             const heroWords = [
                 'interactive simulations',
-                'expert instruction',
+                'real-time physics',
                 'hands-on experiments',
                 'advanced calculations',
-                'real-world applications',
-                'cutting-edge research'
+                'quantum mechanics',
+                'wave dynamics'
             ];
             
             new Typewriter(
@@ -967,7 +902,7 @@
                 { startDelay: 1000, pauseTime: 2500 }
             );
             
-            // Initialize enhanced swipe carousel
+            // Initialize carousel
             const carouselTrack = document.getElementById('carouselTrack');
             const carouselIndicators = document.getElementById('carouselIndicators');
             const prevBtn = document.getElementById('prevBtn');
@@ -986,3 +921,80 @@
     </script>
 </body>
 </html>
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "Physics Website" }}</title>
+    <link rel="stylesheet" href="/physics-website/css/style.css">
+    <script src="/physics-website/js/simulations-data.js"></script>
+    <style>
+        /* Landing page specific styles */
+        .hero-landing {
+            padding: 120px 0 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-landing::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(26, 115, 232, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(26, 115, 232, 0.02) 0%, transparent 50%);
+            animation: heroMove 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes heroMove {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(1deg) scale(1.05); }
+        }
+
+        .hero-title-landing {
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            letter-spacing: -1px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-line {
+            display: block;
+            width: 100%;
+        }
+
+        .title-line:first-child {
+            margin-bottom: 16px;
+        }
+
+        .constant-text {
+            color: var(--text-primary);
+        }
+
+        .changing-text {
+            color: var(--primary);
+            font-weight: 500;
+            border-right: 3px solid var(--primary);
+            padding-right: 4px;
+            animation: blink 1.2s infinite;
+            min-width: 2px;
+            display: inline-block;
+            min-height: 1em;
+        }
+
+        @key

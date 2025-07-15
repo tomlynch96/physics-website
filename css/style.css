@@ -1037,3 +1037,43 @@ button:focus {
         font-size: 16px;
     }
 }
+/* Embedded simulation styles for chapter pages */
+.physics-simulation {
+    margin: 32px 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.physics-simulation .simulation-container {
+    background: var(--surface-variant);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.simulation-caption {
+    padding: 16px;
+    background: var(--surface-variant);
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+}
+
+.simulation-caption strong {
+    color: var(--text-primary);
+}
+
+/* Responsive simulation containers */
+@media (max-width: 768px) {
+    .physics-simulation .simulation-container {
+        height: 300px !important;
+    }
+    
+    .simulation-caption {
+        padding: 12px;
+        font-size: 13px;
+    }
+}
