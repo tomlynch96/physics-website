@@ -726,29 +726,44 @@
                 const k = 2 * Math.PI / wavelength;
                 const harmonicOmega = 2 * Math.PI * frequency;
                 
-                // Calculate the two traveling waves that create the standing wave
-                let incident, reflected, standing;
+                // Calculate standing wave first (this is the correct physics)
+                let standing;
+                if (!this.leftOpen && !this.rightOpen) {
+                    // Fixed-fixed: both ends are nodes
+                    standing = 2 * Math.sin(k * x) * Math.cos(harmonicOmega * t);
+                } else if (this.leftOpen && this.rightOpen) {
+                    // Free-free: both ends are antinodes
+                    standing = 2 * Math.cos(k * x) * Math.cos(harmonicOmega * t);
+                } else if (!this.leftOpen && this.rightOpen) {
+                    // Fixed-free: node at left, antinode at right
+                    standing = 2 * Math.sin(k * x) * Math.cos(harmonicOmega * t);
+                } else if (this.leftOpen && !this.rightOpen) {
+                    // Free-fixed: antinode at left, node at right
+                    standing = 2 * Math.cos(k * x) * Math.cos(harmonicOmega * t);
+                }
+                
+                // Now calculate component waves that would create this standing wave
+                let incident, reflected;
                 
                 if (!this.leftOpen && !this.rightOpen) {
-                    // Fixed-fixed: incident wave traveling right, reflected wave traveling left with phase inversion
-                    incident = Math.sin(k * x - harmonicOmega * t);
-                    reflected = -Math.sin(k * x + harmonicOmega * t);
-                    standing = incident + reflected; // This gives 2*sin(kx)*cos(ωt)
-                } else if (this.leftOpen && this.rightOpen) {
-                    // Free-free: incident wave traveling right, reflected wave traveling left without phase inversion
-                    incident = Math.cos(k * x - harmonicOmega * t);
-                    reflected = Math.cos(k * x + harmonicOmega * t);
-                    standing = incident + reflected; // This gives 2*cos(kx)*cos(ωt)
-                } else if (!this.leftOpen && this.rightOpen) {
-                    // Fixed-free: incident wave traveling right, reflected from free end without phase inversion
+                    // Fixed-fixed: 
+                    // For standing wave 2sin(kx)cos(ωt), we need:
+                    // sin(kx-ωt) + sin(kx+ωt) = 2sin(kx)cos(ωt) [correct identity]
+                    // The reflection has no phase change for this to work:
                     incident = Math.sin(k * x - harmonicOmega * t);
                     reflected = Math.sin(k * x + harmonicOmega * t);
-                    standing = incident + reflected;
+                } else if (this.leftOpen && this.rightOpen) {
+                    // Free-free: cos waves with no phase inversion
+                    incident = Math.cos(k * x - harmonicOmega * t);
+                    reflected = Math.cos(k * x + harmonicOmega * t);
+                } else if (!this.leftOpen && this.rightOpen) {
+                    // Fixed-free: sin wave with no phase inversion at free end
+                    incident = Math.sin(k * x - harmonicOmega * t);
+                    reflected = Math.sin(k * x + harmonicOmega * t);
                 } else if (this.leftOpen && !this.rightOpen) {
-                    // Free-fixed: incident wave traveling right, reflected from fixed end with phase inversion  
+                    // Free-fixed: cos wave with phase inversion at fixed end
                     incident = Math.cos(k * x - harmonicOmega * t);
                     reflected = -Math.cos(k * x + harmonicOmega * t);
-                    standing = incident + reflected;
                 }
                 
                 return {
@@ -849,16 +864,23 @@
                 this.ctx.lineWidth = 4;
                 
                 if (isOpen) {
-                    // Open end - just a line
+                    // Open end - vertical line indicating free boundary
                     this.ctx.beginPath();
                     this.ctx.moveTo(x, this.waveY - 50);
                     this.ctx.lineTo(x, this.waveY + 50);
                     this.ctx.stroke();
                 } else {
-                    // Closed end - wall
+                    // Closed end - thick wall indicating fixed boundary
                     this.ctx.fillStyle = '#666';
-                    this.ctx.fillRect(x - 5, this.waveY - 60, 10, 120);
-                    this.ctx.strokeRect(x - 5, this.waveY - 60, 10, 120);
+                    if (x === 0) {
+                        // Left wall
+                        this.ctx.fillRect(x, this.waveY - 60, 10, 120);
+                        this.ctx.strokeRect(x, this.waveY - 60, 10, 120);
+                    } else {
+                        // Right wall
+                        this.ctx.fillRect(x - 10, this.waveY - 60, 10, 120);
+                        this.ctx.strokeRect(x - 10, this.waveY - 60, 10, 120);
+                    }
                 }
             }
             
@@ -872,58 +894,70 @@
                 let antinodePositions = [];
                 
                 if (!this.leftOpen && !this.rightOpen) {
-                    // Fixed-fixed: nodes at x = n*L/(harmonic), antinodes between nodes
+                    // Fixed-fixed: nodes at both ends and evenly spaced
+                    // Nodes at: x = n*L/harmonic for n = 0,1,2,...,harmonic
                     for (let n = 0; n <= this.harmonic; n++) {
                         const nodeX = (n * L) / this.harmonic;
-                        if (nodeX >= 0 && nodeX <= L) nodePositions.push(nodeX);
+                        nodePositions.push(nodeX);
                     }
+                    // Antinodes between nodes
                     for (let n = 0; n < this.harmonic; n++) {
                         const antinodeX = ((n + 0.5) * L) / this.harmonic;
-                        if (antinodeX >= 0 && antinodeX <= L) antinodePositions.push(antinodeX);
+                        antinodePositions.push(antinodeX);
                     }
                 } else if (this.leftOpen && this.rightOpen) {
-                    // Free-free: antinodes at x = n*L/(harmonic), nodes between antinodes
+                    // Free-free: antinodes at both ends
+                    // Antinodes at: x = n*L/harmonic for n = 0,1,2,...,harmonic
                     for (let n = 0; n <= this.harmonic; n++) {
                         const antinodeX = (n * L) / this.harmonic;
-                        if (antinodeX >= 0 && antinodeX <= L) antinodePositions.push(antinodeX);
+                        antinodePositions.push(antinodeX);
                     }
+                    // Nodes between antinodes
                     for (let n = 0; n < this.harmonic; n++) {
                         const nodeX = ((n + 0.5) * L) / this.harmonic;
-                        if (nodeX >= 0 && nodeX <= L) nodePositions.push(nodeX);
+                        nodePositions.push(nodeX);
                     }
-                } else {
-                    // Mixed boundaries: more complex pattern for odd harmonics
-                    const effectiveHarmonic = 2 * this.harmonic - 1;
-                    if (!this.leftOpen && this.rightOpen) {
-                        // Fixed-free: node at left (0), antinode at right (L)
-                        nodePositions.push(0);
-                        antinodePositions.push(L);
-                        
-                        for (let n = 1; n < effectiveHarmonic; n++) {
-                            const x = (n * L) / effectiveHarmonic;
-                            if (n % 2 === 0) {
-                                nodePositions.push(x);
-                            } else {
-                                antinodePositions.push(x);
-                            }
+                } else if (!this.leftOpen && this.rightOpen) {
+                    // Fixed-free: node at left (x=0), antinode at right (x=L)
+                    const effectiveLength = (4 * L) / (2 * this.harmonic - 1);
+                    const spacing = effectiveLength / 4;
+                    
+                    // Node at left end
+                    nodePositions.push(0);
+                    // Antinode at right end  
+                    antinodePositions.push(L);
+                    
+                    // Add intermediate nodes and antinodes
+                    for (let i = 1; i < (2 * this.harmonic - 1); i++) {
+                        const x = (i * L) / (2 * this.harmonic - 1);
+                        if (i % 2 === 0) {
+                            nodePositions.push(x);
+                        } else {
+                            antinodePositions.push(x);
                         }
-                    } else if (this.leftOpen && !this.rightOpen) {
-                        // Free-fixed: antinode at left (0), node at right (L)
-                        antinodePositions.push(0);
-                        nodePositions.push(L);
-                        
-                        for (let n = 1; n < effectiveHarmonic; n++) {
-                            const x = (n * L) / effectiveHarmonic;
-                            if (n % 2 === 0) {
-                                antinodePositions.push(x);
-                            } else {
-                                nodePositions.push(x);
-                            }
+                    }
+                } else if (this.leftOpen && !this.rightOpen) {
+                    // Free-fixed: antinode at left (x=0), node at right (x=L)
+                    const effectiveLength = (4 * L) / (2 * this.harmonic - 1);
+                    const spacing = effectiveLength / 4;
+                    
+                    // Antinode at left end
+                    antinodePositions.push(0);
+                    // Node at right end
+                    nodePositions.push(L);
+                    
+                    // Add intermediate nodes and antinodes
+                    for (let i = 1; i < (2 * this.harmonic - 1); i++) {
+                        const x = (i * L) / (2 * this.harmonic - 1);
+                        if (i % 2 === 0) {
+                            antinodePositions.push(x);
+                        } else {
+                            nodePositions.push(x);
                         }
                     }
                 }
                 
-                // Draw nodes
+                // Draw nodes (red dots - zero displacement)
                 nodePositions.forEach(x => {
                     this.ctx.fillStyle = 'rgba(255, 100, 100, 0.6)';
                     this.ctx.beginPath();
@@ -935,7 +969,7 @@
                     this.ctx.fillText('N', x - 6, this.waveY - 15);
                 });
                 
-                // Draw antinodes
+                // Draw antinodes (green dots - maximum displacement)
                 antinodePositions.forEach(x => {
                     this.ctx.fillStyle = 'rgba(100, 255, 100, 0.6)';
                     this.ctx.beginPath();
