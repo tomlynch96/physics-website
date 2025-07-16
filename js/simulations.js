@@ -1,4 +1,4 @@
-// Shared navigation functionality
+// Shared navigation functionality 1
 function toggleMobileMenu() {
     const mobileNav = document.getElementById('mobileNav');
     const menuToggle = document.querySelector('.menu-toggle');
