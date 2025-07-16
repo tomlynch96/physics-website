@@ -14,6 +14,21 @@ Write your content here. You can use:
 - Lists like this one
 - Links to other pages
 
+<div class="physics-simulation" data-sim-id="standing-wave">
+    <div class="simulation-container" id="sim-standing-wave-container" style="height: 600px; margin-bottom: 16px;"></div>
+    <div class="simulation-caption">
+        <strong>Standing Wave Simulator</strong> - Your original interactive simulation with full functionality
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof SimulationUtils !== 'undefined') {
+        SimulationUtils.renderSimulation('standing-wave', 'sim-standing-wave-container');
+    }
+});
+</script>
+
 ## Interactive Pendulum Simulation
 
 Let's explore pendulum motion with this interactive simulation:

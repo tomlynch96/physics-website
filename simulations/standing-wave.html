@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standing Wave Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .simulation-panel {
+            flex: 2;
+            min-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .canvas-container {
+            position: relative;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            display: block;
+            background: #0a0a0a;
+            cursor: crosshair;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group h3 {
+            margin: 0 0 15px 0;
+            color: #4facfe;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .boundary-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .boundary-option {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .boundary-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        button.active {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .slider-container {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.5);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.5);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4facfe;
+        }
+
+        .graph-container {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .bead-list {
+            margin-top: 15px;
+        }
+
+        .bead-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .bead-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .remove-bead {
+            background: rgba(255, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .remove-bead:hover {
+            background: rgba(255, 0, 0, 0.5);
+        }
+
+        .value-display {
+            font-size: 0.9em;
+            color: #4facfe;
+            margin-left: 10px;
+        }
+
+        .speed-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .speed-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            font-weight: 500;
+            min-width: 80px;
+        }
+
+        .speed-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .speed-button.active {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .simulation-panel {
+                min-width: auto;
+                padding: 20px;
+            }
+            
+            .controls-panel {
+                min-width: auto;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+            
+            canvas {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+            }
+            
+            .boundary-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .boundary-option {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .boundary-buttons {
+                gap: 8px;
+            }
+            
+            .control-group {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .speed-controls {
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+            
+            .speed-button {
+                padding: 10px 15px;
+                font-size: 0.9em;
+                min-width: 70px;
+            }
+            
+            .instructions {
+                font-size: 0.9em;
+                padding: 12px;
+            }
+            
+            .slider-container {
+                margin-bottom: 12px;
+            }
+            
+            input[type="range"] {
+                height: 8px;
+            }
+            
+            input[type="range"]::-webkit-slider-thumb {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .simulation-panel {
+                padding: 15px;
+            }
+            
+            .controls-panel {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .boundary-option {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+            
+            .boundary-buttons {
+                justify-content: center;
+            }
+            
+            .speed-controls {
+                justify-content: center;
+            }
+            
+            .bead-item {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            
+            .control-group h3 {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="simulation-panel">
+            <h1>Standing Wave Simulation</h1>
+            
+            <div class="instructions">
+                <strong>Instructions:</strong> Click on the wave to place colored beads. Watch how different points oscillate in phase or anti-phase. Use the controls to change boundary conditions and wave properties.
+            </div>
+            
+            <div class="speed-controls">
+                <button class="speed-button" id="pauseBtn">⏸️ Pause</button>
+                <button class="speed-button" id="slowBtn">🐌 Slow</button>
+                <button class="speed-button active" id="normalBtn">▶️ Normal</button>
+                <button class="speed-button" id="fastBtn">🚀 Fast</button>
+            </div>
+            
+            <div class="canvas-container">
+                <canvas id="waveCanvas" width="800" height="400"></canvas>
+            </div>
+            
+            <div class="graph-container">
+                <h3>Displacement vs Time Graph</h3>
+                <canvas id="graphCanvas" width="800" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="control-group">
+                <h3>Boundary Conditions</h3>
+                <div class="boundary-controls">
+                    <div class="boundary-option">
+                        <label>Left End</label>
+                        <div class="boundary-buttons">
+                            <button id="leftOpen" class="active">Open</button>
+                            <button id="leftClosed">Closed</button>
+                        </div>
+                    </div>
+                    <div class="boundary-option">
+                        <label>Right End</label>
+                        <div class="boundary-buttons">
+                            <button id="rightOpen">Open</button>
+                            <button id="rightClosed" class="active">Closed</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Wave Properties</h3>
+                <div class="slider-container">
+                    <label for="harmonic">Harmonic: <span class="value-display" id="harmonicValue">1st (Fundamental)</span></label>
+                    <input type="range" id="harmonic" min="1" max="5" step="1" value="1">
+                </div>
+                <div class="slider-container">
+                    <label for="amplitude">Amplitude: <span class="value-display" id="ampValue">50</span></label>
+                    <input type="range" id="amplitude" min="10" max="100" step="5" value="50">
+                </div>
+                <div class="slider-container">
+                    <label for="damping">Damping: <span class="value-display" id="dampValue">0.02</span></label>
+                    <input type="range" id="damping" min="0" max="0.1" step="0.01" value="0.02">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Display Options</h3>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="showComponents">
+                    <label for="showComponents">Show Component Waves</label>
+                </div>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="showNodes">
+                    <label for="showNodes">Show Nodes & Antinodes</label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Control</h3>
+                <button id="reset" style="width: 100%; padding: 15px; margin-top: 10px; background: rgba(255, 100, 100, 0.3);">Reset Beads</button>
+            </div>
+
+            <div class="control-group">
+                <h3>Tracking Points</h3>
+                <div class="bead-list" id="beadList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class StandingWaveSimulation {
+            constructor() {
+                this.canvas = document.getElementById('waveCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.graphCanvas = document.getElementById('graphCanvas');
+                this.graphCtx = this.graphCanvas.getContext('2d');
+                
+                this.setupCanvas();
+                
+                this.harmonic = 1;
+                this.amplitude = 50;
+                this.damping = 0.02;
+                this.time = 0;
+                this.leftOpen = true;
+                this.rightOpen = false;
+                this.showComponents = false;
+                this.showNodes = false;
+                this.speed = 1.0; // 1.0 = normal, 0.5 = slow, 2.0 = fast, 0 = paused
+                
+                this.beads = [];
+                this.beadColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe'];
+                this.colorIndex = 0;
+                
+                this.graphData = [];
+                this.maxGraphPoints = 300;
+                
+                this.setupEventListeners();
+                this.animate();
+            }
+            
+            setupCanvas() {
+                // Make canvas responsive
+                const container = this.canvas.parentElement;
+                const containerWidth = container.clientWidth;
+                
+                if (window.innerWidth <= 768) {
+                    this.canvas.width = Math.min(containerWidth - 40, 600);
+                    this.canvas.height = 300;
+                    this.graphCanvas.width = this.canvas.width;
+                    this.graphCanvas.height = 150;
+                } else {
+                    this.canvas.width = 800;
+                    this.canvas.height = 400;
+                    this.graphCanvas.width = 800;
+                    this.graphCanvas.height = 200;
+                }
+                
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                this.waveHeight = this.height * 0.6;
+                this.waveY = this.height / 2;
+            }
+            
+            resetWaveForBoundaryChange() {
+                // Reset time and clear bead data to ensure proper standing wave formation
+                this.time = 0;
+                this.graphData = [];
+                // Keep beads but clear their history
+                this.beads.forEach(bead => {
+                    this.graphData[bead.id] = [];
+                });
+            }
+            
+            setupEventListeners() {
+                // Handle window resize for responsive canvas
+                window.addEventListener('resize', () => {
+                    this.setupCanvas();
+                });
+                
+                // Canvas click for placing beads
+                this.canvas.addEventListener('click', (e) => {
+                    const rect = this.canvas.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+                    const y = (e.clientY - rect.top) * (this.canvas.height / rect.height);
+                    
+                    if (y > this.waveY - 100 && y < this.waveY + 100) {
+                        this.addBead(x);
+                    }
+                });
+                
+                // Touch support for mobile
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const rect = this.canvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    const x = (touch.clientX - rect.left) * (this.canvas.width / rect.width);
+                    const y = (touch.clientY - rect.top) * (this.canvas.height / rect.height);
+                    
+                    if (y > this.waveY - 100 && y < this.waveY + 100) {
+                        this.addBead(x);
+                    }
+                });
+                
+                // Speed controls
+                document.getElementById('pauseBtn').addEventListener('click', () => {
+                    this.speed = 0;
+                    this.updateSpeedButtons('pauseBtn');
+                });
+                
+                document.getElementById('slowBtn').addEventListener('click', () => {
+                    this.speed = 0.3;
+                    this.updateSpeedButtons('slowBtn');
+                });
+                
+                document.getElementById('normalBtn').addEventListener('click', () => {
+                    this.speed = 1.0;
+                    this.updateSpeedButtons('normalBtn');
+                });
+                
+                document.getElementById('fastBtn').addEventListener('click', () => {
+                    this.speed = 2.5;
+                    this.updateSpeedButtons('fastBtn');
+                });
+                
+                // Boundary controls
+                document.getElementById('leftOpen').addEventListener('click', () => {
+                    this.leftOpen = true;
+                    this.resetWaveForBoundaryChange();
+                    this.updateBoundaryButtons();
+                });
+                
+                document.getElementById('leftClosed').addEventListener('click', () => {
+                    this.leftOpen = false;
+                    this.resetWaveForBoundaryChange();
+                    this.updateBoundaryButtons();
+                });
+                
+                document.getElementById('rightOpen').addEventListener('click', () => {
+                    this.rightOpen = true;
+                    this.resetWaveForBoundaryChange();
+                    this.updateBoundaryButtons();
+                });
+                
+                document.getElementById('rightClosed').addEventListener('click', () => {
+                    this.rightOpen = false;
+                    this.resetWaveForBoundaryChange();
+                    this.updateBoundaryButtons();
+                });
+                
+                // Sliders
+                document.getElementById('harmonic').addEventListener('input', (e) => {
+                    this.harmonic = parseInt(e.target.value);
+                    this.resetWaveForBoundaryChange(); // Reset for clean harmonic transition
+                    this.updateHarmonicDisplay();
+                });
+                
+                document.getElementById('amplitude').addEventListener('input', (e) => {
+                    this.amplitude = parseInt(e.target.value);
+                    document.getElementById('ampValue').textContent = this.amplitude;
+                });
+                
+                document.getElementById('damping').addEventListener('input', (e) => {
+                    this.damping = parseFloat(e.target.value);
+                    document.getElementById('dampValue').textContent = this.damping.toFixed(2);
+                });
+                
+                // Checkboxes
+                document.getElementById('showComponents').addEventListener('change', (e) => {
+                    this.showComponents = e.target.checked;
+                });
+                
+                document.getElementById('showNodes').addEventListener('change', (e) => {
+                    this.showNodes = e.target.checked;
+                });
+                
+                // Control buttons
+                document.getElementById('reset').addEventListener('click', () => {
+                    this.beads = [];
+                    this.graphData = [];
+                    this.colorIndex = 0;
+                    this.updateBeadList();
+                });
+            }
+            
+            updateHarmonicDisplay() {
+                const harmonicNames = {
+                    1: '1st (Fundamental)',
+                    2: '2nd (First Overtone)',
+                    3: '3rd (Second Overtone)', 
+                    4: '4th (Third Overtone)',
+                    5: '5th (Fourth Overtone)'
+                };
+                document.getElementById('harmonicValue').textContent = harmonicNames[this.harmonic];
+            }
+            
+            updateSpeedButtons(activeId) {
+                ['pauseBtn', 'slowBtn', 'normalBtn', 'fastBtn'].forEach(id => {
+                    document.getElementById(id).classList.toggle('active', id === activeId);
+                });
+            }
+            
+            updateBoundaryButtons() {
+                document.getElementById('leftOpen').classList.toggle('active', this.leftOpen);
+                document.getElementById('leftClosed').classList.toggle('active', !this.leftOpen);
+                document.getElementById('rightOpen').classList.toggle('active', this.rightOpen);
+                document.getElementById('rightClosed').classList.toggle('active', !this.rightOpen);
+            }
+            
+            addBead(x) {
+                const bead = {
+                    x: x,
+                    color: this.beadColors[this.colorIndex % this.beadColors.length],
+                    id: this.beads.length
+                };
+                this.beads.push(bead);
+                this.colorIndex++;
+                this.updateBeadList();
+            }
+            
+            removeBead(id) {
+                this.beads = this.beads.filter(bead => bead.id !== id);
+                this.updateBeadList();
+            }
+            
+            updateBeadList() {
+                const beadList = document.getElementById('beadList');
+                beadList.innerHTML = '';
+                
+                this.beads.forEach(bead => {
+                    const beadItem = document.createElement('div');
+                    beadItem.className = 'bead-item';
+                    beadItem.innerHTML = `
+                        <div class="bead-color" style="background-color: ${bead.color}"></div>
+                        <span>Point ${bead.id + 1} (x: ${Math.round(bead.x)})</span>
+                        <button class="remove-bead" onclick="simulation.removeBead(${bead.id})">Remove</button>
+                    `;
+                    beadList.appendChild(beadItem);
+                });
+            }
+            
+            calculateWave(x, t) {
+                const L = this.width; // Length of the string
+                const baseFreq = 1.0; // Base frequency for fundamental
+                
+                // Calculate wavelength and frequency for the given harmonic
+                let wavelength, frequency;
+                if (!this.leftOpen && !this.rightOpen) {
+                    // Both ends closed (nodes at both ends): λ = 2L/n, f = n*f₀
+                    wavelength = (2 * L) / this.harmonic;
+                    frequency = this.harmonic * baseFreq;
+                } else if (this.leftOpen && this.rightOpen) {
+                    // Both ends open (antinodes at both ends): λ = 2L/n, f = n*f₀
+                    wavelength = (2 * L) / this.harmonic;
+                    frequency = this.harmonic * baseFreq;
+                } else {
+                    // One end open, one closed: λ = 4L/(2n-1), f = (2n-1)*f₀/2
+                    wavelength = (4 * L) / (2 * this.harmonic - 1);
+                    frequency = ((2 * this.harmonic - 1) * baseFreq) / 2;
+                }
+                
+                const k = 2 * Math.PI / wavelength;
+                const harmonicOmega = 2 * Math.PI * frequency;
+                
+                // Calculate the two traveling waves that create the standing wave
+                let incident, reflected, standing;
+                
+                if (!this.leftOpen && !this.rightOpen) {
+                    // Fixed-fixed: incident wave traveling right, reflected wave traveling left with phase inversion
+                    incident = Math.sin(k * x - harmonicOmega * t);
+                    reflected = -Math.sin(k * x + harmonicOmega * t);
+                    standing = incident + reflected; // This gives 2*sin(kx)*cos(ωt)
+                } else if (this.leftOpen && this.rightOpen) {
+                    // Free-free: incident wave traveling right, reflected wave traveling left without phase inversion
+                    incident = Math.cos(k * x - harmonicOmega * t);
+                    reflected = Math.cos(k * x + harmonicOmega * t);
+                    standing = incident + reflected; // This gives 2*cos(kx)*cos(ωt)
+                } else if (!this.leftOpen && this.rightOpen) {
+                    // Fixed-free: incident wave traveling right, reflected from free end without phase inversion
+                    incident = Math.sin(k * x - harmonicOmega * t);
+                    reflected = Math.sin(k * x + harmonicOmega * t);
+                    standing = incident + reflected;
+                } else if (this.leftOpen && !this.rightOpen) {
+                    // Free-fixed: incident wave traveling right, reflected from fixed end with phase inversion  
+                    incident = Math.cos(k * x - harmonicOmega * t);
+                    reflected = -Math.cos(k * x + harmonicOmega * t);
+                    standing = incident + reflected;
+                }
+                
+                return {
+                    incident: incident * this.amplitude,
+                    reflected: reflected * this.amplitude,
+                    standing: standing * this.amplitude * Math.exp(-this.damping * t)
+                };
+            }
+            
+            draw() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+                
+                // Draw string
+                this.ctx.strokeStyle = '#333';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, this.waveY);
+                this.ctx.lineTo(this.width, this.waveY);
+                this.ctx.stroke();
+                
+                // Draw boundaries
+                this.drawBoundary(0, this.leftOpen);
+                this.drawBoundary(this.width, this.rightOpen);
+                
+                // Calculate wave data
+                const points = [];
+                const incidentPoints = [];
+                const reflectedPoints = [];
+                
+                for (let x = 0; x < this.width; x += 2) {
+                    const wave = this.calculateWave(x, this.time);
+                    points.push({ x, y: this.waveY - wave.standing });
+                    incidentPoints.push({ x, y: this.waveY - wave.incident });
+                    reflectedPoints.push({ x, y: this.waveY - wave.reflected });
+                }
+                
+                // Draw component waves if enabled
+                if (this.showComponents) {
+                    this.drawWave(incidentPoints, 'rgba(255, 100, 100, 0.5)', 1);
+                    this.drawWave(reflectedPoints, 'rgba(100, 255, 100, 0.5)', 1);
+                }
+                
+                // Draw standing wave
+                this.drawWave(points, '#4facfe', 3);
+                
+                // Draw nodes and antinodes if enabled
+                if (this.showNodes) {
+                    this.drawNodesAndAntinodes();
+                }
+                
+                // Draw beads
+                this.beads.forEach(bead => {
+                    const wave = this.calculateWave(bead.x, this.time);
+                    const y = this.waveY - wave.standing;
+                    
+                    this.ctx.fillStyle = bead.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(bead.x, y, 8, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                    
+                    // Add to graph data
+                    if (!this.graphData[bead.id]) {
+                        this.graphData[bead.id] = [];
+                    }
+                    this.graphData[bead.id].push({
+                        time: this.time,
+                        displacement: wave.standing,
+                        color: bead.color
+                    });
+                    
+                    // Limit graph data points
+                    if (this.graphData[bead.id].length > this.maxGraphPoints) {
+                        this.graphData[bead.id].shift();
+                    }
+                });
+                
+                this.drawGraph();
+            }
+            
+            drawWave(points, color, lineWidth) {
+                this.ctx.strokeStyle = color;
+                this.ctx.lineWidth = lineWidth;
+                this.ctx.beginPath();
+                
+                for (let i = 0; i < points.length; i++) {
+                    if (i === 0) {
+                        this.ctx.moveTo(points[i].x, points[i].y);
+                    } else {
+                        this.ctx.lineTo(points[i].x, points[i].y);
+                    }
+                }
+                
+                this.ctx.stroke();
+            }
+            
+            drawBoundary(x, isOpen) {
+                this.ctx.strokeStyle = '#fff';
+                this.ctx.lineWidth = 4;
+                
+                if (isOpen) {
+                    // Open end - just a line
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, this.waveY - 50);
+                    this.ctx.lineTo(x, this.waveY + 50);
+                    this.ctx.stroke();
+                } else {
+                    // Closed end - wall
+                    this.ctx.fillStyle = '#666';
+                    this.ctx.fillRect(x - 5, this.waveY - 60, 10, 120);
+                    this.ctx.strokeRect(x - 5, this.waveY - 60, 10, 120);
+                }
+            }
+            
+            drawNodesAndAntinodes() {
+                if (!this.showNodes) return;
+                
+                const L = this.width;
+                
+                // Find nodes and antinodes based on boundary conditions and harmonic
+                let nodePositions = [];
+                let antinodePositions = [];
+                
+                if (!this.leftOpen && !this.rightOpen) {
+                    // Fixed-fixed: nodes at x = n*L/(harmonic), antinodes between nodes
+                    for (let n = 0; n <= this.harmonic; n++) {
+                        const nodeX = (n * L) / this.harmonic;
+                        if (nodeX >= 0 && nodeX <= L) nodePositions.push(nodeX);
+                    }
+                    for (let n = 0; n < this.harmonic; n++) {
+                        const antinodeX = ((n + 0.5) * L) / this.harmonic;
+                        if (antinodeX >= 0 && antinodeX <= L) antinodePositions.push(antinodeX);
+                    }
+                } else if (this.leftOpen && this.rightOpen) {
+                    // Free-free: antinodes at x = n*L/(harmonic), nodes between antinodes
+                    for (let n = 0; n <= this.harmonic; n++) {
+                        const antinodeX = (n * L) / this.harmonic;
+                        if (antinodeX >= 0 && antinodeX <= L) antinodePositions.push(antinodeX);
+                    }
+                    for (let n = 0; n < this.harmonic; n++) {
+                        const nodeX = ((n + 0.5) * L) / this.harmonic;
+                        if (nodeX >= 0 && nodeX <= L) nodePositions.push(nodeX);
+                    }
+                } else {
+                    // Mixed boundaries: more complex pattern for odd harmonics
+                    const effectiveHarmonic = 2 * this.harmonic - 1;
+                    if (!this.leftOpen && this.rightOpen) {
+                        // Fixed-free: node at left (0), antinode at right (L)
+                        nodePositions.push(0);
+                        antinodePositions.push(L);
+                        
+                        for (let n = 1; n < effectiveHarmonic; n++) {
+                            const x = (n * L) / effectiveHarmonic;
+                            if (n % 2 === 0) {
+                                nodePositions.push(x);
+                            } else {
+                                antinodePositions.push(x);
+                            }
+                        }
+                    } else if (this.leftOpen && !this.rightOpen) {
+                        // Free-fixed: antinode at left (0), node at right (L)
+                        antinodePositions.push(0);
+                        nodePositions.push(L);
+                        
+                        for (let n = 1; n < effectiveHarmonic; n++) {
+                            const x = (n * L) / effectiveHarmonic;
+                            if (n % 2 === 0) {
+                                antinodePositions.push(x);
+                            } else {
+                                nodePositions.push(x);
+                            }
+                        }
+                    }
+                }
+                
+                // Draw nodes
+                nodePositions.forEach(x => {
+                    this.ctx.fillStyle = 'rgba(255, 100, 100, 0.6)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(x, this.waveY, 4, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                    
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    this.ctx.font = '12px Arial';
+                    this.ctx.fillText('N', x - 6, this.waveY - 15);
+                });
+                
+                // Draw antinodes
+                antinodePositions.forEach(x => {
+                    this.ctx.fillStyle = 'rgba(100, 255, 100, 0.6)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(x, this.waveY, 4, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                    
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    this.ctx.font = '12px Arial';
+                    this.ctx.fillText('A', x - 6, this.waveY - 15);
+                });
+            }
+            
+            drawGraph() {
+                this.graphCtx.clearRect(0, 0, this.graphCanvas.width, this.graphCanvas.height);
+                
+                // Draw axes
+                this.graphCtx.strokeStyle = '#666';
+                this.graphCtx.lineWidth = 1;
+                this.graphCtx.beginPath();
+                this.graphCtx.moveTo(0, this.graphCanvas.height / 2);
+                this.graphCtx.lineTo(this.graphCanvas.width, this.graphCanvas.height / 2);
+                this.graphCtx.stroke();
+                
+                // Draw grid
+                for (let i = 0; i < this.graphCanvas.width; i += 50) {
+                    this.graphCtx.strokeStyle = '#333';
+                    this.graphCtx.beginPath();
+                    this.graphCtx.moveTo(i, 0);
+                    this.graphCtx.lineTo(i, this.graphCanvas.height);
+                    this.graphCtx.stroke();
+                }
+                
+                // Draw data for each bead
+                this.beads.forEach(bead => {
+                    const data = this.graphData[bead.id];
+                    if (!data || data.length < 2) return;
+                    
+                    this.graphCtx.strokeStyle = bead.color;
+                    this.graphCtx.lineWidth = 2;
+                    this.graphCtx.beginPath();
+                    
+                    for (let i = 0; i < data.length; i++) {
+                        const x = (i / this.maxGraphPoints) * this.graphCanvas.width;
+                        const y = this.graphCanvas.height / 2 - data[i].displacement;
+                        
+                        if (i === 0) {
+                            this.graphCtx.moveTo(x, y);
+                        } else {
+                            this.graphCtx.lineTo(x, y);
+                        }
+                    }
+                    
+                    this.graphCtx.stroke();
+                });
+                
+                // Draw labels
+                this.graphCtx.fillStyle = '#fff';
+                this.graphCtx.font = '12px Arial';
+                this.graphCtx.fillText('Time →', this.graphCanvas.width - 60, this.graphCanvas.height - 10);
+                this.graphCtx.fillText('Displacement', 10, 20);
+            }
+            
+            animate() {
+                if (this.speed > 0) {
+                    this.time += 0.02 * this.speed;
+                }
+                
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Initialize simulation
+        const simulation = new StandingWaveSimulation();
+    </script>
+</body>
+</html>
