@@ -180,21 +180,70 @@ class SimulationUtils {
     }
     
     static renderStandingWave(container, params = {}) {
-        // Create an iframe to load the standing wave simulation
+        // Create wrapper for embedded simulation with controls
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.width = '100%';
+        wrapper.style.height = '100%';
+        wrapper.style.borderRadius = '8px';
+        wrapper.style.overflow = 'hidden';
+        wrapper.style.background = '#000';
+        
+        // Create iframe
         const iframe = document.createElement('iframe');
-        iframe.src = '/physics-website/simulations/standing-wave.html';
+        iframe.src = '/physics-website/simulations/standing-wave.html?embedded=true';
         iframe.style.width = '100%';
         iframe.style.height = '100%';
         iframe.style.border = 'none';
-        iframe.style.borderRadius = '8px';
+        iframe.allowFullscreen = true;
         
-        // Clear container and add iframe
+        // Create overlay controls
+        const controls = document.createElement('div');
+        controls.style.position = 'absolute';
+        controls.style.top = '10px';
+        controls.style.right = '10px';
+        controls.style.display = 'flex';
+        controls.style.gap = '8px';
+        controls.style.zIndex = '10';
+        controls.style.opacity = '0.7';
+        controls.style.transition = 'opacity 0.3s ease';
+        
+        // Hover effect for controls
+        wrapper.addEventListener('mouseenter', () => {
+            controls.style.opacity = '1';
+        });
+        wrapper.addEventListener('mouseleave', () => {
+            controls.style.opacity = '0.7';
+        });
+        
+        // Expand button
+        const expandBtn = this.createControlButton('🔍', 'Enlarge', () => {
+            this.enlargeSimulation(iframe);
+        });
+        
+        // Fullscreen button
+        const fullscreenBtn = this.createControlButton('⛶', 'Fullscreen', () => {
+            this.enterFullscreen(wrapper);
+        });
+        
+        // New tab button
+        const newTabBtn = this.createControlButton('↗', 'Open in new tab', () => {
+            window.open('/physics-website/simulations/standing-wave.html', '_blank');
+        });
+        
+        controls.appendChild(expandBtn);
+        controls.appendChild(fullscreenBtn);
+        controls.appendChild(newTabBtn);
+        
+        wrapper.appendChild(iframe);
+        wrapper.appendChild(controls);
+        
+        // Clear container and add wrapper
         container.innerHTML = '';
-        container.appendChild(iframe);
+        container.appendChild(wrapper);
         
         // Handle iframe loading and parameter passing
         iframe.addEventListener('load', () => {
-            // You can send parameters to the iframe if needed
             try {
                 if (Object.keys(params).length > 0) {
                     iframe.contentWindow.postMessage({
@@ -206,6 +255,147 @@ class SimulationUtils {
                 console.log('Could not send parameters to simulation iframe');
             }
         });
+    }
+    
+    static createControlButton(icon, title, onClick) {
+        const btn = document.createElement('button');
+        btn.innerHTML = icon;
+        btn.title = title;
+        btn.onclick = onClick;
+        btn.style.cssText = `
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        `;
+        
+        btn.addEventListener('mouseenter', () => {
+            btn.style.background = 'rgba(26, 115, 232, 0.8)';
+            btn.style.transform = 'scale(1.1)';
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            btn.style.background = 'rgba(0, 0, 0, 0.7)';
+            btn.style.transform = 'scale(1)';
+        });
+        
+        return btn;
+    }
+    
+    static enlargeSimulation(iframe) {
+        // Create modal overlay
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        `;
+        
+        // Create enlarged iframe container
+        const container = document.createElement('div');
+        container.style.cssText = `
+            width: 90%;
+            height: 85%;
+            max-width: 1200px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        `;
+        
+        // Create close button
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '✕';
+        closeBtn.title = 'Close';
+        closeBtn.style.cssText = `
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        `;
+        
+        closeBtn.addEventListener('mouseenter', () => {
+            closeBtn.style.background = 'rgba(255, 0, 0, 0.9)';
+            closeBtn.style.transform = 'scale(1.1)';
+        });
+        
+        closeBtn.addEventListener('mouseleave', () => {
+            closeBtn.style.background = 'rgba(255, 0, 0, 0.7)';
+            closeBtn.style.transform = 'scale(1)';
+        });
+        
+        closeBtn.onclick = () => {
+            document.body.removeChild(modal);
+            document.body.style.overflow = '';
+        };
+        
+        // Create enlarged iframe
+        const enlargedIframe = document.createElement('iframe');
+        enlargedIframe.src = iframe.src;
+        enlargedIframe.style.cssText = `
+            width: 100%;
+            height: 100%;
+            border: none;
+        `;
+        enlargedIframe.allowFullscreen = true;
+        
+        container.appendChild(enlargedIframe);
+        container.appendChild(closeBtn);
+        modal.appendChild(container);
+        
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close on Escape key
+        const escapeHandler = (e) => {
+            if (e.key === 'Escape') {
+                document.body.removeChild(modal);
+                document.body.style.overflow = '';
+                document.removeEventListener('keydown', escapeHandler);
+            }
+        };
+        document.addEventListener('keydown', escapeHandler);
+        
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+    }
+    
+    static enterFullscreen(element) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        }
     }
     
     static generateEmbedCode(simulationId, params = {}) {
