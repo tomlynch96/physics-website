@@ -3,7 +3,7 @@ layout: layout.html
 title: "Page 1: First Topic"
 ---
 
-This is the first page of Chapter 1. Here you can add your specific content.
+This is the first page of Chapter 1! Here you can add your specific content.
 
 ## Introduction
 
