@@ -3,198 +3,137 @@ layout: layout.html
 title: "Chapter 1: Getting Started"
 ---
 
-This is the first chapter of my website. Here you'll find the introduction and basic concepts.
+# Simple Harmonic Motion
 
-## Chapter Overview
+This chapter covers the fundamental concepts of oscillatory motion, from basic principles to mathematical analysis.
 
-In this chapter, we'll cover:
-- Basic concepts and introduction to simple harmonic motion
-- Mathematical foundations and differential equations
-- Energy conservation and applications
-- Key principles of oscillatory motion
+## What You'll Learn
 
-## Pages in This Chapter
+- Basic concepts of simple harmonic motion
+- Mathematical foundations and differential equations  
+- Energy conservation in oscillating systems
+- Real-world applications of SHM
 
-<div class="chapter-pages">
-    <a href="/physics-website/chapters/chapter-1/page-1/" class="page-link">
-        <div class="page-info">
-            <span class="page-number">01</span>
-            <div class="page-details">
-                <h3>Introduction & Simulations</h3>
-                <p>Interactive pendulum, wave interference, and electric field demos</p>
-            </div>
+## Chapter Pages
+
+<div class="page-list">
+    <a href="/physics-website/chapters/chapter-1/page-1/" class="page-item">
+        <span class="page-num">1</span>
+        <div class="page-content">
+            <h3>Introduction & Simulations</h3>
+            <p>Interactive demos and basic concepts</p>
         </div>
-        <span class="page-arrow">→</span>
+        <span class="arrow">→</span>
     </a>
-    
-    <a href="/physics-website/chapters/chapter-1/page-2/" class="page-link">
-        <div class="page-info">
-            <span class="page-number">02</span>
-            <div class="page-details">
-                <h3>Mathematical Analysis</h3>
-                <p>Equations, calculations, and self-marking questions</p>
-            </div>
+
+    <a href="/physics-website/chapters/chapter-1/page-2/" class="page-item">
+        <span class="page-num">2</span>
+        <div class="page-content">
+            <h3>Mathematical Analysis</h3>
+            <p>Equations and self-marking questions</p>
         </div>
-        <span class="page-arrow">→</span>
+        <span class="arrow">→</span>
     </a>
-    
-    <div class="page-link coming-soon">
-        <div class="page-info">
-            <span class="page-number">03</span>
-            <div class="page-details">
-                <h3>Advanced Applications</h3>
-                <p>Real-world examples and complex systems</p>
-            </div>
+
+    <div class="page-item disabled">
+        <span class="page-num">3</span>
+        <div class="page-content">
+            <h3>Advanced Applications</h3>
+            <p>Coming soon...</p>
         </div>
-        <span class="page-arrow">→</span>
+        <span class="arrow">→</span>
     </div>
 </div>
 
-Navigate through the pages to learn more!
-
 <style>
-.chapter-pages {
-    margin: 32px 0;
+.page-list {
+    margin: 2rem 0;
 }
 
-.page-link {
+.page-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-    margin: 12px 0;
+    padding: 1rem 1.5rem;
+    margin: 0.5rem 0;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.2s ease;
 }
 
-.page-link::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: var(--primary);
-    transform: scaleY(0);
-    transition: transform 0.3s ease;
-}
-
-.page-link:hover::before {
-    transform: scaleY(1);
-}
-
-.page-link:hover {
+.page-item:hover {
     border-color: var(--primary);
-    background: var(--surface-variant);
-    transform: translateX(8px);
-    box-shadow: var(--shadow);
+    transform: translateX(4px);
 }
 
-.page-link.coming-soon {
-    opacity: 0.6;
+.page-item.disabled {
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
-.page-link.coming-soon:hover {
-    transform: none;
+.page-item.disabled:hover {
     border-color: var(--border);
-    background: var(--surface);
-    box-shadow: none;
+    transform: none;
 }
 
-.page-link.coming-soon::before {
-    background: var(--text-secondary);
-}
-
-.page-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex: 1;
-}
-
-.page-number {
+.page-num {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 2rem;
+    height: 2rem;
     background: var(--primary);
     color: white;
     border-radius: 50%;
     font-weight: 600;
-    font-size: 16px;
-    flex-shrink: 0;
+    margin-right: 1rem;
 }
 
-.page-link.coming-soon .page-number {
+.page-item.disabled .page-num {
     background: var(--text-secondary);
 }
 
-.page-details h3 {
-    margin: 0 0 4px 0;
-    font-size: 18px;
+.page-content {
+    flex: 1;
+}
+
+.page-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
     font-weight: 500;
-    color: var(--text-primary);
 }
 
-.page-details p {
+.page-content p {
     margin: 0;
-    font-size: 14px;
+    font-size: 0.9rem;
     color: var(--text-secondary);
-    line-height: 1.4;
 }
 
-.page-arrow {
-    font-size: 20px;
+.arrow {
     color: var(--primary);
     font-weight: bold;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
-.page-link:hover .page-arrow {
-    transform: translateX(4px);
+.page-item:hover .arrow {
+    transform: translateX(2px);
 }
 
-.page-link.coming-soon .page-arrow {
+.page-item.disabled .arrow {
     color: var(--text-secondary);
-}
-
-.page-link.coming-soon:hover .page-arrow {
-    transform: none;
 }
 
 @media (max-width: 768px) {
-    .page-link {
-        padding: 16px 20px;
+    .page-item {
+        padding: 0.75rem 1rem;
     }
     
-    .page-info {
-        gap: 16px;
-    }
-    
-    .page-number {
-        width: 40px;
-        height: 40px;
-        font-size: 14px;
-    }
-    
-    .page-details h3 {
-        font-size: 16px;
-    }
-    
-    .page-details p {
-        font-size: 13px;
-    }
-    
-    .page-link:hover {
-        transform: translateX(4px);
+    .page-num {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.9rem;
     }
 }
 </style>
