@@ -15,146 +15,186 @@ In this chapter, we'll cover:
 
 ## Pages in This Chapter
 
-<div class="chapter-page-grid">
-    <a href="/physics-website/chapters/chapter-1/page-1/" class="page-card">
-        <div class="page-number">Page 1</div>
-        <div class="page-title">Introduction & Simulations</div>
-        <div class="page-description">Basic concepts with interactive pendulum, wave interference, and electric field simulations</div>
-        <div class="page-meta">
-            <span class="page-duration">⏱️ 15 min</span>
-            <span class="page-type">🔬 Interactive</span>
+<div class="chapter-pages">
+    <a href="/physics-website/chapters/chapter-1/page-1/" class="page-link">
+        <div class="page-info">
+            <span class="page-number">01</span>
+            <div class="page-details">
+                <h3>Introduction & Simulations</h3>
+                <p>Interactive pendulum, wave interference, and electric field demos</p>
+            </div>
         </div>
+        <span class="page-arrow">→</span>
     </a>
     
-    <a href="/physics-website/chapters/chapter-1/page-2/" class="page-card">
-        <div class="page-number">Page 2</div>
-        <div class="page-title">Mathematical Analysis</div>
-        <div class="page-description">Equations, differential analysis, period calculations, and self-marking questions</div>
-        <div class="page-meta">
-            <span class="page-duration">⏱️ 20 min</span>
-            <span class="page-type">📐 Mathematical</span>
+    <a href="/physics-website/chapters/chapter-1/page-2/" class="page-link">
+        <div class="page-info">
+            <span class="page-number">02</span>
+            <div class="page-details">
+                <h3>Mathematical Analysis</h3>
+                <p>Equations, calculations, and self-marking questions</p>
+            </div>
         </div>
+        <span class="page-arrow">→</span>
     </a>
     
-    <a href="/physics-website/chapters/chapter-1/page-3/" class="page-card coming-soon">
-        <div class="page-number">Page 3</div>
-        <div class="page-title">Advanced Applications</div>
-        <div class="page-description">Real-world examples and complex systems</div>
-        <div class="page-meta">
-            <span class="page-duration">⏱️ Coming Soon</span>
-            <span class="page-type">🚀 Advanced</span>
+    <div class="page-link coming-soon">
+        <div class="page-info">
+            <span class="page-number">03</span>
+            <div class="page-details">
+                <h3>Advanced Applications</h3>
+                <p>Real-world examples and complex systems</p>
+            </div>
         </div>
-    </a>
+        <span class="page-arrow">→</span>
+    </div>
 </div>
 
 Navigate through the pages to learn more!
 
 <style>
-.chapter-page-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
+.chapter-pages {
     margin: 32px 0;
 }
 
-.page-card {
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    margin: 12px 0;
     background: var(--surface);
-    border: 2px solid var(--border);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 24px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
-.page-card::before {
+.page-link::before {
     content: '';
     position: absolute;
+    left: 0;
     top: 0;
-    left: -100%;
-    width: 100%;
+    width: 4px;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.1), transparent);
-    transition: left 0.5s;
+    background: var(--primary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
 }
 
-.page-card:hover::before {
-    left: 100%;
+.page-link:hover::before {
+    transform: scaleY(1);
 }
 
-.page-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
+.page-link:hover {
     border-color: var(--primary);
+    background: var(--surface-variant);
+    transform: translateX(8px);
+    box-shadow: var(--shadow);
 }
 
-.page-card.coming-soon {
+.page-link.coming-soon {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-.page-card.coming-soon:hover {
+.page-link.coming-soon:hover {
     transform: none;
-    box-shadow: var(--shadow);
     border-color: var(--border);
+    background: var(--surface);
+    box-shadow: none;
 }
 
-.page-number {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    letter-spacing: 0.5px;
-}
-
-.page-card.coming-soon .page-number {
+.page-link.coming-soon::before {
     background: var(--text-secondary);
 }
 
-.page-title {
+.page-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.page-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.page-link.coming-soon .page-number {
+    background: var(--text-secondary);
+}
+
+.page-details h3 {
+    margin: 0 0 4px 0;
     font-size: 18px;
     font-weight: 500;
     color: var(--text-primary);
-    margin-bottom: 8px;
-    line-height: 1.3;
 }
 
-.page-description {
+.page-details p {
+    margin: 0;
     font-size: 14px;
     color: var(--text-secondary);
-    line-height: 1.5;
-    margin-bottom: 16px;
+    line-height: 1.4;
 }
 
-.page-meta {
-    display: flex;
-    gap: 12px;
-    font-size: 12px;
-    color: var(--text-tertiary);
+.page-arrow {
+    font-size: 20px;
+    color: var(--primary);
+    font-weight: bold;
+    transition: transform 0.3s ease;
 }
 
-.page-duration,
-.page-type {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+.page-link:hover .page-arrow {
+    transform: translateX(4px);
+}
+
+.page-link.coming-soon .page-arrow {
+    color: var(--text-secondary);
+}
+
+.page-link.coming-soon:hover .page-arrow {
+    transform: none;
 }
 
 @media (max-width: 768px) {
-    .chapter-page-grid {
-        grid-template-columns: 1fr;
+    .page-link {
+        padding: 16px 20px;
+    }
+    
+    .page-info {
         gap: 16px;
     }
     
-    .page-card {
-        padding: 20px;
+    .page-number {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .page-details h3 {
+        font-size: 16px;
+    }
+    
+    .page-details p {
+        font-size: 13px;
+    }
+    
+    .page-link:hover {
+        transform: translateX(4px);
     }
 }
 </style>
