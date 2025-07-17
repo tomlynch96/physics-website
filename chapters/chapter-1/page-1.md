@@ -107,4 +107,5 @@ You can also link to the full simulations browser: [View All Simulations](/physi
 
 **Navigation:**
 - [Back to Chapter 1](/physics-website/chapters/chapter-1/)
+- [Next - Page 2] (/physics-website/chapters/chapter-1/page-2/)
 - [Home](/physics-website/)
