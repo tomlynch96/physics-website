@@ -18,6 +18,9 @@
     --shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
     --shadow-hover: 0 4px 8px rgba(60, 64, 67, 0.15);
     --radius: 8px;
+    --success: #0f9d58;
+    --error: #d93025;
+
 }
 
 body {
