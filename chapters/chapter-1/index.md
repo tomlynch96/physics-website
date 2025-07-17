@@ -16,45 +16,39 @@ This chapter covers the fundamental concepts of oscillatory motion, from basic p
 
 ## Chapter Pages
 
-<div class="page-list">
-    <a href="/physics-website/chapters/chapter-1/page-1/" class="page-item">
-        <span class="page-num">1</span>
-        <div class="page-content">
-            <h3>Introduction & Simulations</h3>
-            <p>Interactive demos and basic concepts</p>
-        </div>
-        <span class="arrow">→</span>
-    </a>
-
-    <a href="/physics-website/chapters/chapter-1/page-2/" class="page-item">
-        <span class="page-num">2</span>
-        <div class="page-content">
-            <h3>Mathematical Analysis</h3>
-            <p>Equations and self-marking questions</p>
-        </div>
-        <span class="arrow">→</span>
-    </a>
-
-    <div class="page-item disabled">
-        <span class="page-num">3</span>
-        <div class="page-content">
-            <h3>Advanced Applications</h3>
-            <p>Coming soon...</p>
-        </div>
-        <span class="arrow">→</span>
+<a href="/physics-website/chapters/chapter-1/page-1/" class="chapter-link">
+    <span class="page-number">1</span>
+    <div class="page-info">
+        <strong>Introduction & Simulations</strong>
+        <p>Interactive demos and basic concepts</p>
     </div>
+    <span class="page-arrow">→</span>
+</a>
+
+<a href="/physics-website/chapters/chapter-1/page-2/" class="chapter-link">
+    <span class="page-number">2</span>
+    <div class="page-info">
+        <strong>Mathematical Analysis</strong>
+        <p>Equations and self-marking questions</p>
+    </div>
+    <span class="page-arrow">→</span>
+</a>
+
+<div class="chapter-link disabled">
+    <span class="page-number">3</span>
+    <div class="page-info">
+        <strong>Advanced Applications</strong>
+        <p>Coming soon...</p>
+    </div>
+    <span class="page-arrow">→</span>
 </div>
 
 <style>
-.page-list {
-    margin: 2rem 0;
-}
-
-.page-item {
+.chapter-link {
     display: flex;
     align-items: center;
-    padding: 1rem 1.5rem;
-    margin: 0.5rem 0;
+    padding: 16px 20px;
+    margin: 8px 0;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -63,77 +57,74 @@ This chapter covers the fundamental concepts of oscillatory motion, from basic p
     transition: all 0.2s ease;
 }
 
-.page-item:hover {
+.chapter-link:hover {
     border-color: var(--primary);
     transform: translateX(4px);
 }
 
-.page-item.disabled {
-    opacity: 0.5;
+.chapter-link.disabled {
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
-.page-item.disabled:hover {
-    border-color: var(--border);
+.chapter-link.disabled:hover {
     transform: none;
+    border-color: var(--border);
 }
 
-.page-num {
-    display: flex;
+.page-number {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 32px;
+    height: 32px;
     background: var(--primary);
     color: white;
     border-radius: 50%;
     font-weight: 600;
-    margin-right: 1rem;
+    font-size: 14px;
+    margin-right: 16px;
+    flex-shrink: 0;
 }
 
-.page-item.disabled .page-num {
+.chapter-link.disabled .page-number {
     background: var(--text-secondary);
 }
 
-.page-content {
+.page-info {
     flex: 1;
 }
 
-.page-content h3 {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.1rem;
-    font-weight: 500;
+.page-info strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: var(--text-primary);
 }
 
-.page-content p {
+.page-info p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 14px;
     color: var(--text-secondary);
 }
 
-.arrow {
+.page-arrow {
     color: var(--primary);
     font-weight: bold;
+    font-size: 18px;
+    margin-left: 16px;
     transition: transform 0.2s ease;
 }
 
-.page-item:hover .arrow {
+.chapter-link:hover .page-arrow {
     transform: translateX(2px);
 }
 
-.page-item.disabled .arrow {
+.chapter-link.disabled .page-arrow {
     color: var(--text-secondary);
 }
 
-@media (max-width: 768px) {
-    .page-item {
-        padding: 0.75rem 1rem;
-    }
-    
-    .page-num {
-        width: 1.75rem;
-        height: 1.75rem;
-        font-size: 0.9rem;
-    }
+.chapter-link.disabled:hover .page-arrow {
+    transform: none;
 }
 </style>
