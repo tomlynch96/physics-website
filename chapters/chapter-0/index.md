@@ -6,9 +6,9 @@ title: "Chapter 0: Demo & Testing Chapter"
 <div style="background: red; color: white; padding: 10px;">
   <h3>Chapters Data Debug:</h3>
   <p>Chapters variable exists: {{ chapters }}</p>
-  <p>Number of chapters: {{ chapters.chapters | length }}</p>
+  <p>Number of chapters: {{ chapters.chapters.size }}</p>
   {% for chapter in chapters.chapters %}
-    <p>Chapter {{ loop.index }}: {{ chapter.id }} - {{ chapter.title }}</p>
+    <p>Chapter {{ forloop.index }}: {{ chapter.id }} - {{ chapter.title }}</p>
   {% endfor %}
 </div>
 
