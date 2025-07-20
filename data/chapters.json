@@ -1,0 +1,40 @@
+{
+  "chapters": [
+    {
+      "id": "chapter-0",
+      "shortTitle": "Ch 0",
+      "title": "Demo & Testing Chapter",
+      "status": "active"
+    },
+    {
+      "id": "chapter-1", 
+      "shortTitle": "Ch 1",
+      "title": "Mechanics - Motion and Forces",
+      "status": "active"
+    },
+    {
+      "id": "chapter-2",
+      "shortTitle": "Ch 2", 
+      "title": "Energy, Work and Power",
+      "status": "active"
+    },
+    {
+      "id": "chapter-3",
+      "shortTitle": "Ch 3",
+      "title": "Materials and Their Properties", 
+      "status": "active"
+    },
+    {
+      "id": "chapter-4",
+      "shortTitle": "Ch 4",
+      "title": "Waves and Wave Properties",
+      "status": "coming-soon"
+    },
+    {
+      "id": "chapter-5",
+      "shortTitle": "Ch 5", 
+      "title": "Superposition and Interference",
+      "status": "coming-soon"
+    }
+  ]
+}
