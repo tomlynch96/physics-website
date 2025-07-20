@@ -2,6 +2,15 @@
 layout: layout.html
 title: "Chapter 0: Demo & Testing Chapter"
 ---
+<!-- DIAGNOSTIC TEST - Remove after testing -->
+<div style="background: red; color: white; padding: 10px;">
+  <h3>Chapters Data Debug:</h3>
+  <p>Chapters variable exists: {{ chapters }}</p>
+  <p>Number of chapters: {{ chapters.chapters | length }}</p>
+  {% for chapter in chapters.chapters %}
+    <p>Chapter {{ loop.index }}: {{ chapter.id }} - {{ chapter.title }}</p>
+  {% endfor %}
+</div>
 
 # 🧪 Demo & Testing Chapter
 
@@ -139,3 +148,4 @@ Use this chapter to:
     transform: none;
 }
 </style>
+
