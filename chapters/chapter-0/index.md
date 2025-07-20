@@ -27,8 +27,7 @@ Use this chapter to:
 *This is your playground for testing website features!*
 
 ## Chapter Pages
-
-<a href="/physics-website/chapters/chapter-1/page-1/" class="chapter-link">
+<a href="/physics-website/chapters/chapter-0/page-1/" class="chapter-link">
     <span class="page-number">1</span>
     <div class="page-info">
         <strong>Introduction & Simulations</strong>
@@ -37,7 +36,7 @@ Use this chapter to:
     <span class="page-arrow">→</span>
 </a>
 
-<a href="/physics-website/chapters/chapter-1/page-2/" class="chapter-link">
+<a href="/physics-website/chapters/chapter-0/page-2/" class="chapter-link">
     <span class="page-number">2</span>
     <div class="page-info">
         <strong>Mathematical Analysis</strong>
