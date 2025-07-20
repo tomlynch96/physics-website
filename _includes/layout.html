@@ -1,161 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or "Physics Website" }}</title>
-    <link rel="stylesheet" href="/physics-website/css/style.css">
-    <script src="/physics-website/js/simulations-data.js"></script>
-</head>
-<body>
-    <header>
-        <div class="header-container">
-            <a href="/physics-website/" class="logo">
-                <div class="logo-text">Physics Education</div>
-            </a>
-            
-            <!-- Desktop Navigation -->
-            <nav>
-                <div class="nav-item">
-                    <a href="/physics-website/" class="active">Home</a>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="dropdown-toggle">
-                        Chapters
-                        <span class="dropdown-arrow">▼</span>
-                    </a>
-                    <div class="dropdown-menu">
-                        <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
-                        <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
-                        <a href="/physics-website/chapters/chapter-2/">Chapter 2: Energy, Work and Power</a>
-                        <a href="/physics-website/chapters/chapter-3/">Chapter 3: Materials and Properties</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a href="/physics-website/simulations/">Simulations</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/physics-website/about/">About Us</a>
-                </div>
-            </nav>
-            
-            <!-- Mobile Menu Toggle -->
-            <button class="menu-toggle" onclick="toggleMobileMenu()">
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-            </button>
+<!-- Replace BOTH the desktop and mobile navigation sections in your _includes/layout.html -->
+
+<!-- Desktop Navigation -->
+<nav>
+    <div class="nav-item">
+        <a href="/physics-website/" class="active">Home</a>
+    </div>
+    <div class="nav-item">
+        <a href="#" class="dropdown-toggle">
+            Chapters
+            <span class="dropdown-arrow">▼</span>
+        </a>
+        <div class="dropdown-menu">
+            <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
+            <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
         </div>
-        
-        <!-- Mobile Navigation Overlay -->
-        <div class="mobile-nav" id="mobileNav">
-            <div class="nav-item">
-                <a href="/physics-website/" class="active">Home</a>
-            </div>
-            <div class="nav-item">
-                <button class="mobile-dropdown-toggle" onclick="toggleMobileDropdown(this)">
-                    Chapters ▼
-                </button>
-                <div class="mobile-dropdown">
-                    <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
-                    <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
-                    <a href="/physics-website/chapters/chapter-2/">Chapter 2: Energy, Work and Power</a>
-                    <a href="/physics-website/chapters/chapter-3/">Chapter 3: Materials and Properties</a>
-                </div>
-            </div>
-            <div class="nav-item">
-                <a href="/physics-website/simulations/">Simulations</a>
-            </div>
-            <div class="nav-item">
-                <a href="/physics-website/about/">About Us</a>
-            </div>
+    </div>
+    <div class="nav-item">
+        <a href="/physics-website/simulations/">Simulations</a>
+    </div>
+    <div class="nav-item">
+        <a href="/physics-website/about/">About Us</a>
+    </div>
+</nav>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav" id="mobileNav">
+    <div class="nav-item">
+        <a href="/physics-website/" class="active">Home</a>
+    </div>
+    <div class="nav-item">
+        <button class="mobile-dropdown-toggle" onclick="toggleMobileDropdown(this)">
+            Chapters ▼
+        </button>
+        <div class="mobile-dropdown">
+            <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
+            <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
         </div>
-    </header>
-
-    <main>
-        <!-- Hero section for homepage only -->
-        {% if page.url == "/" %}
-        <section class="hero">
-            <div class="floating-equations">
-                <div class="equation">F = ma</div>
-                <div class="equation">E = mc²</div>
-                <div class="equation">F = kx</div>
-                <div class="equation">P = IV</div>
-                <div class="equation">λ = v/f</div>
-            </div>
-            <div class="hero-content">
-                <h1>{{ title or "Advanced Physics Education Platform" }}</h1>
-                <p class="subtitle">Comprehensive learning resources and interactive simulations designed for deep understanding of fundamental physics principles.</p>
-                <a href="/physics-website/chapters/chapter-1/" class="cta-button">
-                    <span>Start Learning</span>
-                    <span>→</span>
-                </a>
-            </div>
-        </section>
-        {% else %}
-        <!-- Regular page content -->
-        <div class="content-block">
-            <h1>{{ title }}</h1>
-            {{ content }}
-        </div>
-        {% endif %}
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2025 Physics Education Platform. Built for academic excellence.</p>
-        </div>
-    </footer>
-
-    <script>
-        function toggleMobileMenu() {
-            const mobileNav = document.getElementById('mobileNav');
-            const menuToggle = document.querySelector('.menu-toggle');
-            
-            mobileNav.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-            
-            // Prevent body scroll when menu is open
-            if (mobileNav.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        }
-
-        function toggleMobileDropdown(button) {
-            const dropdown = button.nextElementSibling;
-            const isActive = dropdown.classList.contains('active');
-            
-            // Close all mobile dropdowns
-            document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
-            
-            // Toggle current dropdown
-            if (!isActive) {
-                dropdown.classList.add('active');
-            }
-        }
-
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                toggleMobileMenu();
-            });
-        });
-
-        // Close mobile menu when resizing to desktop
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768) {
-                const mobileNav = document.getElementById('mobileNav');
-                const menuToggle = document.querySelector('.menu-toggle');
-                
-                mobileNav.classList.remove('active');
-                menuToggle.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-    </script>
-</body>
-</html>
+    </div>
+    <div class="nav-item">
+        <a href="/physics-website/simulations/">Simulations</a>
+    </div>
+    <div class="nav-item">
+        <a href="/physics-website/about/">About Us</a>
+    </div>
+</div>
