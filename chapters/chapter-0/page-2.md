@@ -1,9 +1,11 @@
 ---
 layout: layout.html
-title: "Page 2: Simple Harmonic Motion - Mathematical Analysis"
+title: "Mathematical Analysis Demo"
 ---
 
-# Simple Harmonic Motion: Mathematical Analysis
+# Mathematical Analysis Demo
+
+(Keep all your existing content below this)
 
 Welcome to the mathematical foundation of simple harmonic motion. In this page, we'll explore the equations that govern oscillatory motion and test your understanding with interactive questions.
 

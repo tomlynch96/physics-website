@@ -1,11 +1,11 @@
 ---
 layout: layout.html
-title: "Page 1: First Topic"
+title: "Introduction & Simulations Demo"
 ---
 
-This is the first page of Chapter 1. Here you can add your specific content.
+# Introduction & Simulations Demo
 
-## Introduction
+(Keep all your existing content below this)
 
 Write your content here. You can use:
 

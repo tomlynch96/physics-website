@@ -1,18 +1,30 @@
 ---
 layout: layout.html
-title: "Chapter 1: Getting Started"
+title: "Chapter 0: Demo & Testing Chapter"
 ---
 
-# Simple Harmonic Motion
+# 🧪 Demo & Testing Chapter
 
-This chapter covers the fundamental concepts of oscillatory motion, from basic principles to mathematical analysis.
+This chapter contains experimental content and demos for testing the website's features.
 
-## What You'll Learn
+## What's Inside
 
-- Basic concepts of simple harmonic motion
-- Mathematical foundations and differential equations  
-- Energy conservation in oscillating systems
-- Real-world applications of SHM
+- Interactive simulations and testing
+- Mathematical analysis with MCQ questions
+- Navigation system verification
+- Content formatting examples
+
+## Purpose
+
+Use this chapter to:
+- Test new simulations before adding to main curriculum
+- Experiment with content formats
+- Verify navigation and responsive design
+- Practice with the content management system
+
+---
+
+*This is your playground for testing website features!*
 
 ## Chapter Pages
 
