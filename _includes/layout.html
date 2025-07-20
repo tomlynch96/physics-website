@@ -26,10 +26,10 @@
                         <span class="dropdown-arrow">▼</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
-                        <a href="/physics-website/chapters/chapter-2/">Chapter 2: Fundamentals</a>
-                        <a href="/physics-website/chapters/chapter-3/">Chapter 3: Advanced Topics</a>
-                        <a href="/physics-website/chapters/chapter-4/">Chapter 4: Applications</a>
+                        <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
+                        <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
+                        <a href="/physics-website/chapters/chapter-2/">Chapter 2: Energy, Work and Power</a>
+                        <a href="/physics-website/chapters/chapter-3/">Chapter 3: Materials and Properties</a>
                     </div>
                 </div>
                 <div class="nav-item">
@@ -58,10 +58,10 @@
                     Chapters ▼
                 </button>
                 <div class="mobile-dropdown">
-                    <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
-                    <a href="/physics-website/chapters/chapter-2/">Chapter 2: Fundamentals</a>
-                    <a href="/physics-website/chapters/chapter-3/">Chapter 3: Advanced Topics</a>
-                    <a href="/physics-website/chapters/chapter-4/">Chapter 4: Applications</a>
+                    <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
+                    <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
+                    <a href="/physics-website/chapters/chapter-2/">Chapter 2: Energy, Work and Power</a>
+                    <a href="/physics-website/chapters/chapter-3/">Chapter 3: Materials and Properties</a>
                 </div>
             </div>
             <div class="nav-item">
@@ -96,8 +96,25 @@
         {% else %}
         <!-- Regular page content -->
         <div class="content-block">
+            {% if chapterSlug and pageSlug %}
+                <!-- Chapter page with breadcrumb -->
+                {% set navData = chapterSlug | getPageNav(pageSlug) %}
+                {% if navData %}
+                <div class="breadcrumb">
+                    <a href="/physics-website/">Home</a> → 
+                    <a href="{{ navData.chapterOverview }}">{{ chapterStructure[chapterSlug].title }}</a> → 
+                    <span>{{ navData.current.title }}</span>
+                </div>
+                {% endif %}
+            {% endif %}
+            
             <h1>{{ title }}</h1>
-            {{ content }}
+            {{ content | safe }}
+            
+            <!-- Auto-generated navigation for chapter pages -->
+            {% if chapterSlug and pageSlug %}
+                {% chapterNav chapterSlug, pageSlug %}
+            {% endif %}
         </div>
         {% endif %}
     </main>
