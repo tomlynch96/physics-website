@@ -437,61 +437,7 @@
                 <div class="logo-text">Physics Education</div>
             </a>
             
-            <!-- Desktop Navigation -->
-            <nav>
-                <div class="nav-item">
-                    <a href="/physics-website/" class="active">Home</a>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="dropdown-toggle">
-                        Chapters
-                        <span class="dropdown-arrow">▼</span>
-                    </a>
-                    <div class="dropdown-menu">
-                        <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
-                        <a href="/physics-website/chapters/chapter-2/">Chapter 2: Fundamentals</a>
-                        <a href="/physics-website/chapters/chapter-3/">Chapter 3: Advanced Topics</a>
-                        <a href="/physics-website/chapters/chapter-4/">Chapter 4: Applications</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a href="/physics-website/simulations/">Simulations</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/physics-website/about/">About Us</a>
-                </div>
-            </nav>
-            
-            <!-- Mobile Menu Toggle -->
-            <button class="menu-toggle" onclick="toggleMobileMenu()">
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-            </button>
-        </div>
-        
-        <!-- Mobile Navigation Overlay -->
-        <div class="mobile-nav" id="mobileNav">
-            <div class="nav-item">
-                <a href="/physics-website/" class="active">Home</a>
-            </div>
-            <div class="nav-item">
-                <button class="mobile-dropdown-toggle" onclick="toggleMobileDropdown(this)">
-                    Chapters ▼
-                </button>
-                <div class="mobile-dropdown">
-                    <a href="/physics-website/chapters/chapter-1/">Chapter 1: Getting Started</a>
-                    <a href="/physics-website/chapters/chapter-2/">Chapter 2: Fundamentals</a>
-                    <a href="/physics-website/chapters/chapter-3/">Chapter 3: Advanced Topics</a>
-                    <a href="/physics-website/chapters/chapter-4/">Chapter 4: Applications</a>
-                </div>
-            </div>
-            <div class="nav-item">
-                <a href="/physics-website/simulations/">Simulations</a>
-            </div>
-            <div class="nav-item">
-                <a href="/physics-website/about/">About Us</a>
-            </div>
+            {% include navigation.html %}
         </div>
     </header>
 
@@ -547,7 +493,25 @@
                     <div class="expandable-card">
                         <div class="card-header">
                             <span class="card-icon">🎯</span>
-                            <div class="card-title">Chapter 1: Classical Mechanics</div>
+                            <div class="card-title">Chapter 0: Demo & Testing</div>
+                            <div class="card-preview">Experimental content and demos for testing website features...</div>
+                            <div class="expand-icon">▼</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-content-inner">
+                                <h4 style="margin-bottom: 12px; color: var(--text-primary);">Chapter Overview:</h4>
+                                <p style="margin-bottom: 12px;">This playground chapter allows you to test new simulations, experiment with content formats, and practice with the content management system before deploying to main curriculum.</p>
+                                <p style="margin-bottom: 12px;"><strong>Key Features:</strong> Interactive simulations, mathematical analysis demos, navigation testing, content formatting examples.</p>
+                                <p style="margin-bottom: 12px;"><strong>Purpose:</strong> Safe testing environment for new features and content development.</p>
+                                <a href="/physics-website/chapters/chapter-0/" style="color: var(--primary); font-weight: 500;">Explore Demo Chapter →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="expandable-card">
+                        <div class="card-header">
+                            <span class="card-icon">🚀</span>
+                            <div class="card-title">Chapter 1: Mechanics - Motion and Forces</div>
                             <div class="card-preview">Fundamental laws of motion, energy, and momentum conservation...</div>
                             <div class="expand-icon">▼</div>
                         </div>
@@ -594,24 +558,6 @@
                                 <p style="margin-bottom: 12px;"><strong>Key Topics:</strong> Schrödinger equation, quantum harmonic oscillator, hydrogen atom, spin, quantum statistics.</p>
                                 <p style="margin-bottom: 12px;"><strong>Learning Outcomes:</strong> Solve quantum mechanical problems, interpret wave functions, and understand quantum measurement.</p>
                                 <a href="/physics-website/chapters/chapter-3/" style="color: var(--primary); font-weight: 500;">Start Chapter 3 →</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable-card">
-                        <div class="card-header">
-                            <span class="card-icon">🔥</span>
-                            <div class="card-title">Chapter 4: Thermodynamics</div>
-                            <div class="card-preview">Heat transfer, entropy, statistical mechanics, and phase transitions...</div>
-                            <div class="expand-icon">▼</div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <h4 style="margin-bottom: 12px; color: var(--text-primary);">Chapter Overview:</h4>
-                                <p style="margin-bottom: 12px;">Study the macroscopic properties of matter and energy transfer. Explore the laws of thermodynamics, kinetic theory, and statistical mechanics. Learn about heat engines, refrigeration cycles, and phase transitions.</p>
-                                <p style="margin-bottom: 12px;"><strong>Key Topics:</strong> First and second laws, entropy, ideal gas law, Maxwell-Boltzmann distribution, phase diagrams.</p>
-                                <p style="margin-bottom: 12px;"><strong>Learning Outcomes:</strong> Analyze thermodynamic cycles, calculate entropy changes, and understand statistical mechanics.</p>
-                                <a href="/physics-website/chapters/chapter-4/" style="color: var(--primary); font-weight: 500;">Start Chapter 4 →</a>
                             </div>
                         </div>
                     </div>

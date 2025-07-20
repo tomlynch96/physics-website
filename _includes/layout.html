@@ -14,57 +14,7 @@
                 <div class="logo-text">Physics Education</div>
             </a>
             
-            <!-- Desktop Navigation -->
-            <nav>
-                <div class="nav-item">
-                    <a href="/physics-website/">Home</a>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="dropdown-toggle">
-                        Chapters
-                        <span class="dropdown-arrow">▼</span>
-                    </a>
-                    <div class="dropdown-menu">
-                        <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
-                        <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a href="/physics-website/simulations/">Simulations</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/physics-website/about/">About Us</a>
-                </div>
-            </nav>
-            
-            <!-- Mobile Menu Toggle -->
-            <button class="menu-toggle" onclick="toggleMobileMenu()">
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-            </button>
-        </div>
-        
-        <!-- Mobile Navigation Overlay -->
-        <div class="mobile-nav" id="mobileNav">
-            <div class="nav-item">
-                <a href="/physics-website/">Home</a>
-            </div>
-            <div class="nav-item">
-                <button class="mobile-dropdown-toggle" onclick="toggleMobileDropdown(this)">
-                    Chapters ▼
-                </button>
-                <div class="mobile-dropdown">
-                    <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
-                    <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
-                </div>
-            </div>
-            <div class="nav-item">
-                <a href="/physics-website/simulations/">Simulations</a>
-            </div>
-            <div class="nav-item">
-                <a href="/physics-website/about/">About Us</a>
-            </div>
+            {% include navigation.html %}
         </div>
     </header>
 
