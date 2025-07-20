@@ -282,9 +282,9 @@ In this page, we've explored the mathematical foundations of simple harmonic mot
 ---
 
 **Navigation:**
-- [Previous: Page 1](/physics-website/chapters/chapter-1/page-1/)
-- [Back to Chapter 1](/physics-website/chapters/chapter-1/)
-- [Next: Page 3](/physics-website/chapters/chapter-1/page-3/)
+- [Previous: Page 1](/physics-website/chapters/chapter-0/page-1/)
+- [Back to Chapter 1](/physics-website/chapters/chapter-0/)
+- [Next: Page 3](/physics-website/chapters/chapter-0/page-3/)
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
 
