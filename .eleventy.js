@@ -1,4 +1,3 @@
-// Updated .eleventy.js with navigation system
 const { ChapterNavigation, CHAPTER_STRUCTURE } = require('./js/chapter-navigation.js');
 
 module.exports = function(eleventyConfig) {
