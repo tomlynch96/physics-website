@@ -9,8 +9,11 @@
             <span class="dropdown-arrow">▼</span>
         </a>
         <div class="dropdown-menu">
-            <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
-            <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
+            {% for chapter in chapters.chapters %}
+                {% if chapter.status == 'active' %}
+                    <a href="/physics-website/chapters/{{ chapter.id }}/">{{ chapter.shortTitle }}: {{ chapter.title }}</a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
     <div class="nav-item">
@@ -38,8 +41,11 @@
             Chapters ▼
         </button>
         <div class="mobile-dropdown">
-            <a href="/physics-website/chapters/chapter-0/">Chapter 0: Demo & Testing</a>
-            <a href="/physics-website/chapters/chapter-1/">Chapter 1: Mechanics - Motion and Forces</a>
+            {% for chapter in chapters.chapters %}
+                {% if chapter.status == 'active' %}
+                    <a href="/physics-website/chapters/{{ chapter.id }}/">{{ chapter.shortTitle }}: {{ chapter.title }}</a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
     <div class="nav-item">
