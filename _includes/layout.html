@@ -6,7 +6,6 @@
     <title>{{ title or "Physics Website" }}</title>
     <link rel="stylesheet" href="/physics-website/css/style.css">
     <script src="/physics-website/js/simulations-data.js"></script>
-    <script src="/physics-website/js/chapter-navigation.js"></script>
 </head>
 <body>
     <header>
@@ -96,25 +95,8 @@
         {% else %}
         <!-- Regular page content -->
         <div class="content-block">
-            {% if chapterSlug and pageSlug %}
-                <!-- Chapter page with breadcrumb -->
-                {% set navData = chapterSlug | getPageNav(pageSlug) %}
-                {% if navData %}
-                <div class="breadcrumb">
-                    <a href="/physics-website/">Home</a> → 
-                    <a href="{{ navData.chapterOverview }}">{{ chapterStructure[chapterSlug].title }}</a> → 
-                    <span>{{ navData.current.title }}</span>
-                </div>
-                {% endif %}
-            {% endif %}
-            
             <h1>{{ title }}</h1>
             {{ content | safe }}
-            
-            <!-- Auto-generated navigation for chapter pages -->
-            {% if chapterSlug and pageSlug %}
-                {% chapterNav chapterSlug, pageSlug %}
-            {% endif %}
         </div>
         {% endif %}
     </main>
