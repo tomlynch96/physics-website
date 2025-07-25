@@ -105,7 +105,7 @@ module.exports = function() {
                 description: 'Energy transformations, work calculations, and power in mechanical systems',
                 icon: '⚡',
                 category: 'core',
-                status: 'coming-soon',
+                status: 'active',
                 featured: true,
                 topics: [
                     'Work and energy concepts',
