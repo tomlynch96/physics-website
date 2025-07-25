@@ -1,5 +1,4 @@
-// _data/chapters.js - Single source of truth for all chapters
-// This file defines all chapter metadata and page structure
+// _data/chapters.js - Single source of truth for all chapter data
 
 module.exports = function() {
     return {
@@ -296,4 +295,3 @@ module.exports = function() {
         ]
     };
 };
-
