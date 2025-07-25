@@ -488,80 +488,59 @@
             <div class="container">
                 <h2 class="section-title">Core Physics Chapters</h2>
                 <p class="section-subtitle">Comprehensive chapters covering fundamental to advanced physics concepts with hands-on applications and real-world problem solving.</p>
-                
+                <!-- Replace the hardcoded expandables-grid section in _includes/landing.html -->
+
                 <div class="expandables-grid">
-                    <div class="expandable-card">
-                        <div class="card-header">
-                            <span class="card-icon">🎯</span>
-                            <div class="card-title">Chapter 0: Demo & Testing</div>
-                            <div class="card-preview">Experimental content and demos for testing website features...</div>
-                            <div class="expand-icon">▼</div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <h4 style="margin-bottom: 12px; color: var(--text-primary);">Chapter Overview:</h4>
-                                <p style="margin-bottom: 12px;">This playground chapter allows you to test new simulations, experiment with content formats, and practice with the content management system before deploying to main curriculum.</p>
-                                <p style="margin-bottom: 12px;"><strong>Key Features:</strong> Interactive simulations, mathematical analysis demos, navigation testing, content formatting examples.</p>
-                                <p style="margin-bottom: 12px;"><strong>Purpose:</strong> Safe testing environment for new features and content development.</p>
-                                <a href="/physics-website/chapters/chapter-0/" style="color: var(--primary); font-weight: 500;">Explore Demo Chapter →</a>
+                    {% for chapter in chapters.chapters %}
+                        {% if chapter.status == 'active' %}
+                            <div class="expandable-card">
+                                <div class="card-header">
+                                    <span class="card-icon">{{ chapter.icon }}</span>
+                                    <div class="card-title">{{ chapter.title }}</div>
+                                    <div class="card-preview">{{ chapter.description }}</div>
+                                    <div class="expand-icon">▼</div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        <h4 style="margin-bottom: 12px; color: var(--text-primary);">Chapter Overview:</h4>
+                                        <p style="margin-bottom: 12px;">{{ chapter.description }}</p>
+                                        
+                                        {% if chapter.pages.size > 0 %}
+                                        <h4 style="margin-bottom: 8px; color: var(--text-primary);">{{ chapter.pages.size }} Lessons in this chapter:</h4>
+                                        <ul style="margin-bottom: 12px; padding-left: 20px; font-size: 14px;">
+                                            {% for page in chapter.pages %}
+                                                <li><strong>{{ page.title }}</strong> - {{ page.description }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                        
+                                        {% if chapter.topics.size > 0 %}
+                                        <h4 style="margin-bottom: 8px; color: var(--text-primary);">Key Topics:</h4>
+                                        <ul style="margin-bottom: 12px; padding-left: 20px;">
+                                            {% for topic in chapter.topics %}
+                                                <li>{{ topic }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                        
+                                        {% if chapter.learningOutcomes.size > 0 %}
+                                        <h4 style="margin-bottom: 8px; color: var(--text-primary);">Learning Outcomes:</h4>
+                                        <ul style="margin-bottom: 12px; padding-left: 20px;">
+                                            {% for outcome in chapter.learningOutcomes %}
+                                                <li>{{ outcome }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                        
+                                        <p style="margin-bottom: 12px;"><strong>Category:</strong> {{ chapter.category | capitalize }}</p>
+                                        <a href="/physics-website/chapters/{{ chapter.id }}/" style="color: var(--primary); font-weight: 500;">Start {{ chapter.title }} →</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable-card">
-                        <div class="card-header">
-                            <span class="card-icon">🚀</span>
-                            <div class="card-title">Chapter 1: Mechanics - Motion and Forces</div>
-                            <div class="card-preview">Fundamental laws of motion, energy, and momentum conservation...</div>
-                            <div class="expand-icon">▼</div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <h4 style="margin-bottom: 12px; color: var(--text-primary);">Chapter Overview:</h4>
-                                <p style="margin-bottom: 12px;">Explore Newton's laws of motion, conservation of energy and momentum, rotational dynamics, and oscillatory motion. Master the mathematical foundations of classical physics through interactive simulations and real-world applications.</p>
-                                <p style="margin-bottom: 12px;"><strong>Key Topics:</strong> Kinematics, dynamics, work-energy theorem, angular momentum, simple harmonic motion, and wave mechanics.</p>
-                                <p style="margin-bottom: 12px;"><strong>Learning Outcomes:</strong> Apply Newton's laws to solve complex motion problems, analyze energy transformations, and understand rotational dynamics.</p>
-                                <a href="/physics-website/chapters/chapter-1/" style="color: var(--primary); font-weight: 500;">Start Chapter 1 →</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable-card">
-                        <div class="card-header">
-                            <span class="card-icon">⚡</span>
-                            <div class="card-title">Chapter 2: Electromagnetism</div>
-                            <div class="card-preview">Electric and magnetic fields, Maxwell's equations, and electromagnetic waves...</div>
-                            <div class="expand-icon">▼</div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <h4 style="margin-bottom: 12px; color: var(--text-primary);">Chapter Overview:</h4>
-                                <p style="margin-bottom: 12px;">Comprehensive study of electric and magnetic phenomena, from Coulomb's law to Maxwell's equations. Understand electromagnetic induction, circuit analysis, and wave propagation through mathematical modeling and laboratory experiments.</p>
-                                <p style="margin-bottom: 12px;"><strong>Key Topics:</strong> Electric fields, magnetic fields, Gauss's law, Faraday's law, electromagnetic induction, AC/DC circuits.</p>
-                                <p style="margin-bottom: 12px;"><strong>Learning Outcomes:</strong> Solve complex electromagnetic problems, design electrical circuits, and understand wave propagation.</p>
-                                <a href="/physics-website/chapters/chapter-2/" style="color: var(--primary); font-weight: 500;">Start Chapter 2 →</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable-card">
-                        <div class="card-header">
-                            <span class="card-icon">⚛️</span>
-                            <div class="card-title">Chapter 3: Quantum Mechanics</div>
-                            <div class="card-preview">Wave-particle duality, uncertainty principle, and quantum systems...</div>
-                            <div class="expand-icon">▼</div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <h4 style="margin-bottom: 12px; color: var(--text-primary);">Chapter Overview:</h4>
-                                <p style="margin-bottom: 12px;">Dive into the fundamental principles of quantum mechanics, exploring wave functions, probability amplitudes, and quantum operators. Understand quantum tunneling, entanglement, and the mathematical framework of quantum theory.</p>
-                                <p style="margin-bottom: 12px;"><strong>Key Topics:</strong> Schrödinger equation, quantum harmonic oscillator, hydrogen atom, spin, quantum statistics.</p>
-                                <p style="margin-bottom: 12px;"><strong>Learning Outcomes:</strong> Solve quantum mechanical problems, interpret wave functions, and understand quantum measurement.</p>
-                                <a href="/physics-website/chapters/chapter-3/" style="color: var(--primary); font-weight: 500;">Start Chapter 3 →</a>
-                            </div>
-                        </div>
-                    </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
+               
             </div>
         </section>
 
