@@ -1,4 +1,4 @@
-// .eleventy.js - Updated to use _data/chapters.js as single source
+// Updated .eleventy.js - Uses _data/chapters.js directly, no external dependencies
 
 module.exports = function(eleventyConfig) {
   // Copy CSS files to output
@@ -16,12 +16,6 @@ module.exports = function(eleventyConfig) {
   // Helper function to find chapter by ID
   function findChapter(chapters, chapterId) {
     return chapters.chapters.find(chapter => chapter.id === chapterId);
-  }
-  
-  // Helper function to find page in chapter
-  function findPage(chapter, pageSlug) {
-    if (!chapter || !chapter.pages) return null;
-    return chapter.pages.find(page => page.slug === pageSlug);
   }
   
   // Add shortcode for automatic chapter navigation
