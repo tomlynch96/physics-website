@@ -1,202 +1,111 @@
-// Chapter Navigation Configuration
-// This file defines the order of pages within each chapter
+// Updated js/chapter-navigation.js - Client-side only, no server dependency
+// This file is now purely for browser functionality
 
-const CHAPTER_STRUCTURE = {
-    'chapter-0': {
-        title: 'Demo & Testing Chapter',
-        pages: [
-            {
-                slug: 'page-1',
-                title: 'Introduction & Simulations',
-                description: 'Interactive demos and basic concepts'
-            },
-            {
-                slug: 'page-2',
-                title: 'Mathematical Analysis',
-                description: 'Equations and self-marking questions'
-            }
-        ]
-    },
-    'chapter-1': {
-        title: 'Mechanics - Motion and Forces',
-        pages: [
-            {
-                slug: 'introduction-to-motion',
-                title: 'Introduction to Motion',
-                description: 'Displacement, velocity, acceleration concepts and vector analysis'
-            },
-            {
-                slug: 'equations-of-motion',
-                title: 'Equations of Motion', 
-                description: 'SUVAT equations derivation and problem-solving techniques'
-            },
-            {
-                slug: 'forces-and-newtons-laws',
-                title: 'Forces and Newton\'s Laws',
-                description: 'Three laws of motion with free body diagrams'
-            },
-            {
-                slug: 'projectile-motion',
-                title: 'Projectile Motion',
-                description: 'Independence of motion components and trajectory analysis'
-            },
-            {
-                slug: 'momentum-and-collisions',
-                title: 'Momentum and Collisions',
-                description: 'Conservation laws and impulse calculations'
-            },
-            {
-                slug: 'equilibrium-and-moments',
-                title: 'Equilibrium and Moments',
-                description: 'Balanced forces and rotational equilibrium'
-            },
-            {
-                slug: 'terminal-velocity',
-                title: 'Terminal Velocity',
-                description: 'Motion through fluids and drag forces'
-            }
-        ]
-    },
-    'chapter-2': {
-        title: 'Energy, Work and Power',
-        pages: [
-            {
-                slug: 'work-and-energy-concepts',
-                title: 'Work and Energy Concepts',
-                description: 'Fundamental definitions and energy transformations'
-            },
-            {
-                slug: 'kinetic-and-potential-energy',
-                title: 'Kinetic and Potential Energy',
-                description: 'Energy calculations and conservation principles'
-            },
-            {
-                slug: 'power-and-efficiency',
-                title: 'Power and Efficiency',
-                description: 'Power calculations in mechanical systems'
-            },
-            {
-                slug: 'springs-and-elastic-energy',
-                title: 'Springs and Elastic Energy',
-                description: 'Hooke\'s law and elastic potential energy'
-            },
-            {
-                slug: 'energy-conservation-problems',
-                title: 'Energy Conservation Problems',
-                description: 'Complex multi-stage energy calculations'
-            }
-        ]
-    },
-    'chapter-3': {
-        title: 'Materials and Their Properties',
-        pages: [
-            {
-                slug: 'density-and-pressure',
-                title: 'Density and Pressure',
-                description: 'Material properties and pressure calculations'
-            },
-            {
-                slug: 'stress-strain-youngs-modulus',
-                title: 'Stress, Strain and Young\'s Modulus',
-                description: 'Mechanical testing of materials'
-            },
-            {
-                slug: 'elasticity-and-plasticity',
-                title: 'Elasticity and Plasticity',
-                description: 'Deformation behavior and material limits'
-            },
-            {
-                slug: 'material-selection',
-                title: 'Material Selection',
-                description: 'Engineering applications and safety factors'
-            }
-        ]
-    }
-    // Add more chapters as you develop them following the physics_website_structure.md plan
-};
-
-// Navigation Helper Functions
+// Simple client-side helper functions for navigation and simulations
 class ChapterNavigation {
-    static getChapterStructure(chapterSlug) {
-        return CHAPTER_STRUCTURE[chapterSlug] || null;
+    // Generate embed code for simulations
+    static generateEmbedCode(simulationId, params = {}) {
+        const paramsStr = Object.keys(params).length > 0 ? 
+            `, ${JSON.stringify(params)}` : '';
+        
+        return `<div class="physics-simulation" data-sim-id="${simulationId}">
+    <div class="simulation-container" id="sim-${simulationId}-container" style="height: 400px; margin-bottom: 16px;"></div>
+    <div class="simulation-caption">
+        <strong>Interactive Simulation</strong> - Explore physics concepts through hands-on interaction.
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof SimulationUtils !== 'undefined') {
+        SimulationUtils.renderSimulation('${simulationId}', 'sim-${simulationId}-container'${paramsStr});
+    }
+});
+</script>`;
     }
     
-    static getPageNavigation(chapterSlug, currentPageSlug) {
-        const chapter = this.getChapterStructure(chapterSlug);
-        if (!chapter) return null;
-        
-        const currentIndex = chapter.pages.findIndex(page => page.slug === currentPageSlug);
-        if (currentIndex === -1) return null;
-        
-        const prevPage = currentIndex > 0 ? chapter.pages[currentIndex - 1] : null;
-        const nextPage = currentIndex < chapter.pages.length - 1 ? chapter.pages[currentIndex + 1] : null;
-        
-        return {
-            current: chapter.pages[currentIndex],
-            previous: prevPage ? {
-                ...prevPage,
-                url: `/physics-website/chapters/${chapterSlug}/${prevPage.slug}/`
-            } : null,
-            next: nextPage ? {
-                ...nextPage,
-                url: `/physics-website/chapters/${chapterSlug}/${nextPage.slug}/`
-            } : null,
-            chapterOverview: `/physics-website/chapters/${chapterSlug}/`
-        };
+    // Copy text to clipboard
+    static copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Code copied to clipboard!');
+        }).catch(() => {
+            alert('Copy failed. Code:\n\n' + text);
+        });
     }
     
-    static generateChapterIndex(chapterSlug) {
-        const chapter = this.getChapterStructure(chapterSlug);
-        if (!chapter) return '';
-        
-        return chapter.pages.map((page, index) => `
-            <a href="/physics-website/chapters/${chapterSlug}/${page.slug}/" class="chapter-link">
-                <span class="page-number">${index + 1}</span>
-                <div class="page-info">
-                    <strong>${page.title}</strong>
-                    <p>${page.description}</p>
-                </div>
-                <span class="page-arrow">→</span>
-            </a>
-        `).join('');
+    // Client-side page navigation helpers (for any future use)
+    static navigateToPage(chapterSlug, pageSlug) {
+        window.location.href = `/physics-website/chapters/${chapterSlug}/${pageSlug}/`;
     }
     
-    static generateNavigationHTML(chapterSlug, currentPageSlug) {
-        const nav = this.getPageNavigation(chapterSlug, currentPageSlug);
-        if (!nav) return '';
+    static navigateToChapter(chapterSlug) {
+        window.location.href = `/physics-website/chapters/${chapterSlug}/`;
+    }
+    
+    // Utility function for smooth scrolling to elements
+    static scrollToElement(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+    
+    // Initialize any client-side navigation features
+    static init() {
+        // Add keyboard shortcuts for navigation if on a chapter page
+        document.addEventListener('keydown', function(e) {
+            // Only activate on chapter pages
+            if (window.location.pathname.includes('/chapters/')) {
+                if (e.key === 'ArrowLeft' && e.ctrlKey) {
+                    // Ctrl + Left Arrow - go to previous page
+                    const prevLink = document.querySelector('.nav-link.nav-prev');
+                    if (prevLink) {
+                        e.preventDefault();
+                        prevLink.click();
+                    }
+                } else if (e.key === 'ArrowRight' && e.ctrlKey) {
+                    // Ctrl + Right Arrow - go to next page
+                    const nextLink = document.querySelector('.nav-link.nav-next');
+                    if (nextLink) {
+                        e.preventDefault();
+                        nextLink.click();
+                    }
+                } else if (e.key === 'ArrowUp' && e.ctrlKey) {
+                    // Ctrl + Up Arrow - go to chapter overview
+                    const chapterLink = document.querySelector('.nav-link.nav-chapter');
+                    if (chapterLink) {
+                        e.preventDefault();
+                        chapterLink.click();
+                    }
+                }
+            }
+        });
         
-        return `
-            <div class="navigation">
-                ${nav.previous ? `
-                    <a href="${nav.previous.url}" class="nav-link nav-prev">
-                        ← Previous: ${nav.previous.title}
-                    </a>
-                ` : '<div></div>'}
-                
-                <a href="${nav.chapterOverview}" class="nav-link nav-chapter">
-                    📚 Chapter Overview
-                </a>
-                
-                ${nav.next ? `
-                    <a href="${nav.next.url}" class="nav-link nav-next">
-                        Next: ${nav.next.title} →
-                    </a>
-                ` : '<div></div>'}
-            </div>
-        `;
+        // Add smooth scrolling to all internal links
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                ChapterNavigation.scrollToElement(targetId);
+            });
+        });
+        
+        console.log('ChapterNavigation client-side features initialized');
     }
 }
 
-// Export for use in templates and build process
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        CHAPTER_STRUCTURE,
-        ChapterNavigation
-    };
-}
+// Auto-initialize when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+    ChapterNavigation.init();
+});
 
 // Make available globally for browser use
 if (typeof window !== 'undefined') {
-    window.CHAPTER_STRUCTURE = CHAPTER_STRUCTURE;
     window.ChapterNavigation = ChapterNavigation;
 }
+
+// Remove server-side exports - this file is now client-side only
+// The old module.exports has been removed to eliminate server dependency
