@@ -7,6 +7,9 @@ module.exports = function(eleventyConfig) {
   // Copy JavaScript files to output
   eleventyConfig.addPassthroughCopy("js");
   
+  //ignore ReadMe
+  eleventyConfig.ignores.add("README.md");
+
   // Copy any images if you add them later
   eleventyConfig.addPassthroughCopy("images");
   
