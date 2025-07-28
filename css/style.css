@@ -1080,3 +1080,391 @@ button:focus {
         font-size: 13px;
     }
 }
+
+/* ========================================
+   CONTENT TEMPLATES CSS
+   ======================================== */
+
+/* Equation boxes (used for definitions and equations) */
+.equation-box {
+    background: linear-gradient(135deg, #f8f9ff 0%, #e8eaff 100%);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 24px 0;
+    position: relative;
+    box-shadow: var(--shadow);
+}
+
+.equation-label {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--primary);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.equation-content {
+    text-align: center;
+    font-size: 1.3em;
+    margin: 8px 0 16px 0;
+    color: var(--text-primary);
+}
+
+.equation-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 12px;
+    line-height: 1.5;
+}
+
+/* MCQ Questions */
+.mcq-container {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    margin: 32px 0;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.mcq-container:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.mcq-header {
+    background: var(--surface-variant);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mcq-number {
+    font-weight: 500;
+    color: var(--primary);
+    font-size: 16px;
+}
+
+.mcq-topic {
+    font-size: 14px;
+    color: var(--text-secondary);
+    background: rgba(26, 115, 232, 0.1);
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.mcq-question {
+    padding: 24px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+}
+
+.mcq-options {
+    padding: 16px 24px 24px 24px;
+}
+
+.mcq-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin: 8px 0;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--surface);
+}
+
+.mcq-option:hover {
+    border-color: var(--primary);
+    background: rgba(26, 115, 232, 0.03);
+    transform: translateX(4px);
+}
+
+.mcq-option.selected {
+    border-color: var(--primary);
+    background: rgba(26, 115, 232, 0.08);
+}
+
+.mcq-option.correct {
+    border-color: var(--success, #0f9d58);
+    background: rgba(15, 157, 88, 0.1);
+}
+
+.mcq-option.incorrect {
+    border-color: var(--error, #d93025);
+    background: rgba(217, 48, 37, 0.1);
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface-variant);
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 12px;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.mcq-option.correct .option-label {
+    background: var(--success, #0f9d58);
+    color: white;
+}
+
+.mcq-option.incorrect .option-label {
+    background: var(--error, #d93025);
+    color: white;
+}
+
+.option-text {
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.mcq-feedback {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.mcq-feedback.correct {
+    background: rgba(15, 157, 88, 0.1);
+    color: var(--success, #0f9d58);
+    border-top-color: var(--success, #0f9d58);
+}
+
+.mcq-feedback.incorrect {
+    background: rgba(217, 48, 37, 0.1);
+    color: var(--error, #d93025);
+    border-top-color: var(--error, #d93025);
+}
+
+/* Practice Questions - Blue Theme */
+.practice-box {
+    background: var(--surface);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius);
+    margin: 32px 0;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.practice-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.practice-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.practice-icon {
+    font-size: 20px;
+}
+
+.practice-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.toggle-solution {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.toggle-solution:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.practice-problem, .practice-solution {
+    padding: 20px 24px;
+}
+
+.practice-problem {
+    background: rgba(26, 115, 232, 0.05);
+    border-bottom: 1px solid rgba(26, 115, 232, 0.1);
+}
+
+.practice-solution {
+    transition: all 0.3s ease;
+}
+
+.solution-steps {
+    margin-top: 16px;
+}
+
+.solution-step {
+    margin-bottom: 16px;
+    padding-left: 16px;
+    border-left: 3px solid var(--primary);
+}
+
+.solution-equation, .solution-calculation {
+    background: var(--surface-variant);
+    padding: 12px;
+    border-radius: 6px;
+    margin: 8px 0;
+    text-align: center;
+}
+
+.practice-answer {
+    background: rgba(26, 115, 232, 0.1);
+    border-top: 1px solid rgba(26, 115, 232, 0.2);
+    padding: 16px;
+    margin-top: 16px;
+    border-radius: 6px;
+    font-size: 18px;
+}
+
+/* Worked Examples - Green Theme */
+.example-box {
+    background: var(--surface);
+    border: 2px solid #0f9d58;
+    border-radius: var(--radius);
+    margin: 32px 0;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.example-header {
+    background: linear-gradient(135deg, #0f9d58 0%, #0d8547 100%);
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.example-icon {
+    font-size: 20px;
+}
+
+.example-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.example-problem, .example-solution, .example-answer {
+    padding: 20px 24px;
+}
+
+.example-problem {
+    background: rgba(15, 157, 88, 0.05);
+    border-bottom: 1px solid rgba(15, 157, 88, 0.1);
+}
+
+.example-solution .solution-steps {
+    margin-top: 16px;
+}
+
+.example-solution .solution-step {
+    margin-bottom: 16px;
+    padding-left: 16px;
+    border-left: 3px solid #0f9d58;
+}
+
+.example-solution .solution-equation, 
+.example-solution .solution-calculation {
+    background: var(--surface-variant);
+    padding: 12px;
+    border-radius: 6px;
+    margin: 8px 0;
+    text-align: center;
+}
+
+.example-answer {
+    background: rgba(15, 157, 88, 0.1);
+    border-top: 1px solid rgba(15, 157, 88, 0.2);
+    font-size: 18px;
+}
+
+/* Template Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .equation-box, .mcq-container, .practice-box, .example-box {
+        margin: 20px 0;
+    }
+    
+    .equation-box {
+        padding: 20px 16px;
+    }
+    
+    .equation-content {
+        font-size: 1.1em;
+    }
+    
+    .equation-label {
+        font-size: 13px;
+        padding: 5px 12px;
+    }
+    
+    .mcq-header {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .mcq-question {
+        padding: 20px 16px;
+    }
+    
+    .mcq-options {
+        padding: 12px 16px 20px 16px;
+    }
+    
+    .mcq-option:hover {
+        transform: none;
+    }
+    
+    .practice-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .toggle-solution {
+        text-align: center;
+    }
+    
+    .practice-problem, .practice-solution {
+        padding: 16px 20px;
+    }
+    
+    .example-problem, .example-solution, .example-answer {
+        padding: 16px 20px;
+    }
+    
+    .solution-step {
+        padding-left: 12px;
+    }
+}
