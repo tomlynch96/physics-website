@@ -4,7 +4,7 @@ A comprehensive curriculum supplement for A-Level Physics students covering all 
 
 ## 🎯 Project Overview
 
-**Purpose**: Curriculum supplement covering most A-Level Physics content through interactive learning
+**Purpose**: Curriculum supplement covering most A-Level Physics content through interactive learning.
 **Target Audience**: A-Level Physics students (UK specifications)
 **Content Strategy**: 24 planned chapters with 139 individual lessons
 **Current Focus**: Chapter 1 (Mechanics) + full simulation library
