@@ -1467,4 +1467,37 @@ button:focus {
     .solution-step {
         padding-left: 12px;
     }
+
+        /* Responsive Images - Add this to css/style.css */
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px auto;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+    }
+
+    /* Images in content blocks */
+    .content-block img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 24px auto;
+    }
+
+    /* Mobile responsive images */
+    @media (max-width: 768px) {
+        .content-block img {
+            margin: 16px auto;
+            max-width: 100%;
+        }
+        
+        /* Ensure images never overflow on mobile */
+        img {
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+        }
+    }
 }
