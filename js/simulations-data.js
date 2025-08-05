@@ -114,7 +114,6 @@ const SIMULATIONS_DATA = [
             { name: 'frequency', label: 'Source Frequency (Hz)', type: 'range', min: 100, max: 1000, step: 50, default: 440 }
         ]
     },
-
     {
         id: 'vector-addition',
         title: 'Vector Addition',
