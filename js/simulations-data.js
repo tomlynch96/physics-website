@@ -114,6 +114,22 @@ const SIMULATIONS_DATA = [
             { name: 'frequency', label: 'Source Frequency (Hz)', type: 'range', min: 100, max: 1000, step: 50, default: 440 }
         ]
     }
+
+    {
+        id: 'vector-addition',
+        title: 'Vector Addition',
+        description: 'Interactive vector addition with drag-and-drop functionality. Adjust scale to fit vectors on paper.',
+        category: 'mechanics',
+        difficulty: 'beginner',
+        icon: '🧭',
+        featured: true,
+        controls: [
+            { name: 'scale', label: 'Scale (1cm = N)', type: 'range', min: 1, max: 100, step: 1, default: 10 },
+            { name: 'displayMode', label: 'Display Mode', type: 'select', options: ['force', 'length'], default: 'force' },
+            { name: 'showGrid', label: 'Show Grid', type: 'checkbox', default: true },
+            { name: 'showComponents', label: 'Show Labels', type: 'checkbox', default: true }
+        ]
+    }
 ];
 
 // Utility class for simulation management

@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Addition Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .simulation-panel {
+            flex: 2;
+            min-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .canvas-container {
+            position: relative;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            background: #f8f9fa;
+        }
+
+        canvas {
+            display: block;
+            background: white;
+            cursor: grab;
+        }
+
+        canvas:active {
+            cursor: grabbing;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group h3 {
+            margin: 0 0 15px 0;
+            color: #4facfe;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 5px;
+            min-width: 140px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #00f2fe 0%, #4facfe 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #ff6b6b 0%, #ff5252 100%);
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(45deg, #ff5252 0%, #ff6b6b 100%);
+        }
+
+        .toggle-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4facfe;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .slider-container {
+            margin-bottom: 15px;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.5);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.5);
+        }
+
+        label {
+            font-size: 14px;
+            color: #e0e0e0;
+            cursor: pointer;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4facfe;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .vector-info {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .vector-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .vector-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-right: 10px;
+        }
+
+        .scale-info {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            color: #4facfe;
+            margin: 10px 0;
+        }
+
+        .value-display {
+            font-size: 0.9em;
+            color: #4facfe;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .simulation-panel {
+                min-width: auto;
+                padding: 20px;
+            }
+            
+            .controls-panel {
+                min-width: auto;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+            
+            canvas {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+            }
+            
+            button {
+                min-width: 120px;
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="simulation-panel">
+            <h1>Vector Addition Simulation</h1>
+            
+            <div class="instructions">
+                <strong>Instructions:</strong><br>
+                1. Click "Add New Vector" to create vectors (maximum 5)<br>
+                2. Drag vectors by their tails to move them around<br>
+                3. Snap vector tails to vector tips to connect them<br>
+                4. The resultant vector appears when all vectors are connected<br>
+                5. Adjust scale so vectors fit on paper when you redraw them
+            </div>
+            
+            <div class="canvas-container">
+                <canvas id="vectorCanvas" width="800" height="600"></canvas>
+            </div>
+            
+            <div class="scale-info" id="scaleInfo">
+                Scale: 1 cm = <span id="scaleValue">10</span> N
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="control-group">
+                <h3>Vector Controls</h3>
+                <button id="addVector">Add New Vector</button>
+                <button id="clearAll" class="clear-btn">Clear All</button>
+                <p style="font-size: 12px; color: #ccc; margin-top: 10px;">
+                    Vectors: <span id="vectorCount">0</span>/5
+                </p>
+            </div>
+
+            <div class="control-group">
+                <h3>Scale Setting</h3>
+                <div class="slider-container">
+                    <label for="scaleSlider">Scale: 1 cm = <span class="value-display" id="scaleDisplay">10</span> N</label>
+                    <input type="range" id="scaleSlider" min="1" max="100" step="1" value="10">
+                </div>
+                <p style="font-size: 12px; color: #ccc; margin-top: 8px;">
+                    Adjust scale so arrows fit on your paper
+                </p>
+            </div>
+
+            <div class="control-group">
+                <h3>Display Options</h3>
+                <div class="toggle-container">
+                    <div class="toggle-item">
+                        <label style="margin-bottom: 8px; display: block; font-weight: 500;">Show:</label>
+                        <select id="displayMode" style="margin-bottom: 15px;">
+                            <option value="force">Force in Newtons (N)</option>
+                            <option value="length">Arrow length in cm</option>
+                        </select>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="showGrid" checked>
+                        <label for="showGrid">Show grid with cm labels</label>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="showComponents" checked>
+                        <label for="showComponents">Show vector labels</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Vector Information</h3>
+                <div class="vector-info">
+                    <div class="vector-list" id="vectorList">
+                        <p style="text-align: center; color: #888;">No vectors added yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Resultant Vector</h3>
+                <div id="resultantInfo" style="text-align: center; color: #4facfe;">
+                    Connect all vectors to see resultant
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class VectorAdditionSimulation {
+            constructor() {
+                this.canvas = document.getElementById('vectorCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                this.setupCanvas();
+                
+                this.vectors = [];
+                this.maxVectors = 5;
+                this.selectedVector = null;
+                this.dragOffset = { x: 0, y: 0 };
+                this.snapDistance = 30;
+                this.scale = 10; // User adjustable scale: 1 cm = N Newtons
+                this.pixelsPerCm = 40; // 40 pixels = 1 cm on screen
+                
+                this.colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#a55eea'];
+                
+                this.displayMode = 'force'; // 'force' or 'length'
+                this.showGrid = true;
+                this.showComponents = true;
+                
+                this.setupEventListeners();
+                this.draw();
+            }
+            
+            setupCanvas() {
+                const container = this.canvas.parentElement;
+                const containerWidth = container.clientWidth - 60;
+                
+                if (window.innerWidth <= 768) {
+                    this.canvas.width = Math.min(containerWidth, 500);
+                    this.canvas.height = 400;
+                } else {
+                    this.canvas.width = 800;
+                    this.canvas.height = 600;
+                }
+                
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                this.centerX = this.width / 2;
+                this.centerY = this.height / 2;
+            }
+            
+            setupEventListeners() {
+                // Button events
+                document.getElementById('addVector').addEventListener('click', () => this.addVector());
+                document.getElementById('clearAll').addEventListener('click', () => this.clearAll());
+                
+                // Scale slider
+                document.getElementById('scaleSlider').addEventListener('input', (e) => {
+                    this.scale = parseInt(e.target.value);
+                    document.getElementById('scaleDisplay').textContent = this.scale;
+                    document.getElementById('scaleValue').textContent = this.scale;
+                    this.draw();
+                });
+                
+                // Toggle events
+                document.getElementById('displayMode').addEventListener('change', (e) => {
+                    this.displayMode = e.target.value;
+                    this.draw();
+                });
+                
+                document.getElementById('showGrid').addEventListener('change', (e) => {
+                    this.showGrid = e.target.checked;
+                    this.draw();
+                });
+                
+                document.getElementById('showComponents').addEventListener('change', (e) => {
+                    this.showComponents = e.target.checked;
+                    this.draw();
+                });
+                
+                // Canvas events
+                this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+                this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+                this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+                
+                // Touch events for mobile
+                this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+                this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+                this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+                
+                // Prevent scrolling on touch
+                this.canvas.addEventListener('touchstart', (e) => e.preventDefault());
+                this.canvas.addEventListener('touchmove', (e) => e.preventDefault());
+                
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.setupCanvas();
+                    this.draw();
+                });
+            }
+            
+            addVector() {
+                if (this.vectors.length >= this.maxVectors) return;
+                
+                const angle = Math.random() * 2 * Math.PI;
+                // Create fixed force values that don't change with scale
+                const forceInN = 20 + Math.random() * 480; // Fixed force: 20N to 500N
+                
+                const vector = {
+                    id: this.vectors.length,
+                    startX: this.centerX + Math.random() * 200 - 100,
+                    startY: this.centerY + Math.random() * 200 - 100,
+                    forceInN: forceInN, // Store the actual force value
+                    angle: angle,
+                    color: this.colors[this.vectors.length % this.colors.length],
+                    connected: false,
+                    connectedTo: null
+                };
+                
+                this.vectors.push(vector);
+                this.updateUI();
+                this.draw();
+            }
+            
+            clearAll() {
+                this.vectors = [];
+                this.selectedVector = null;
+                this.updateUI();
+                this.draw();
+            }
+            
+            getVectorMagnitude(vector) {
+                // Calculate magnitude in pixels based on current scale
+                return (vector.forceInN / this.scale) * this.pixelsPerCm;
+            }
+            
+            getVectorEnd(vector) {
+                const magnitude = this.getVectorMagnitude(vector);
+                return {
+                    x: vector.startX + magnitude * Math.cos(vector.angle),
+                    y: vector.startY + magnitude * Math.sin(vector.angle)
+                };
+            }
+            
+            getMousePos(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = this.canvas.width / rect.width;
+                const scaleY = this.canvas.height / rect.height;
+                
+                return {
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top) * scaleY
+                };
+            }
+            
+            getTouchPos(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = this.canvas.width / rect.width;
+                const scaleY = this.canvas.height / rect.height;
+                
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scaleX,
+                    y: (e.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            
+            getVectorAtPoint(x, y) {
+                for (let vector of this.vectors) {
+                    const distance = Math.sqrt((x - vector.startX) ** 2 + (y - vector.startY) ** 2);
+                    if (distance < 20) { // 20 pixel radius for selection
+                        return vector;
+                    }
+                }
+                return null;
+            }
+            
+            handleMouseDown(e) {
+                const pos = this.getMousePos(e);
+                this.selectedVector = this.getVectorAtPoint(pos.x, pos.y);
+                
+                if (this.selectedVector) {
+                    this.dragOffset.x = pos.x - this.selectedVector.startX;
+                    this.dragOffset.y = pos.y - this.selectedVector.startY;
+                    this.canvas.style.cursor = 'grabbing';
+                }
+            }
+            
+            handleMouseMove(e) {
+                if (this.selectedVector) {
+                    const pos = this.getMousePos(e);
+                    this.selectedVector.startX = pos.x - this.dragOffset.x;
+                    this.selectedVector.startY = pos.y - this.dragOffset.y;
+                    
+                    this.checkForSnapping();
+                    this.draw();
+                }
+            }
+            
+            handleMouseUp(e) {
+                if (this.selectedVector) {
+                    this.selectedVector = null;
+                    this.canvas.style.cursor = 'grab';
+                    this.updateConnections();
+                    this.draw();
+                }
+            }
+            
+            handleTouchStart(e) {
+                const pos = this.getTouchPos(e);
+                this.selectedVector = this.getVectorAtPoint(pos.x, pos.y);
+                
+                if (this.selectedVector) {
+                    this.dragOffset.x = pos.x - this.selectedVector.startX;
+                    this.dragOffset.y = pos.y - this.selectedVector.startY;
+                }
+            }
+            
+            handleTouchMove(e) {
+                if (this.selectedVector) {
+                    const pos = this.getTouchPos(e);
+                    this.selectedVector.startX = pos.x - this.dragOffset.x;
+                    this.selectedVector.startY = pos.y - this.dragOffset.y;
+                    
+                    this.checkForSnapping();
+                    this.draw();
+                }
+            }
+            
+            handleTouchEnd(e) {
+                if (this.selectedVector) {
+                    this.selectedVector = null;
+                    this.updateConnections();
+                    this.draw();
+                }
+            }
+            
+            checkForSnapping() {
+                if (!this.selectedVector) return;
+                
+                for (let other of this.vectors) {
+                    if (other === this.selectedVector) continue;
+                    
+                    const otherEnd = this.getVectorEnd(other);
+                    const distance = Math.sqrt(
+                        (this.selectedVector.startX - otherEnd.x) ** 2 + 
+                        (this.selectedVector.startY - otherEnd.y) ** 2
+                    );
+                    
+                    if (distance < this.snapDistance) {
+                        this.selectedVector.startX = otherEnd.x;
+                        this.selectedVector.startY = otherEnd.y;
+                        break;
+                    }
+                }
+            }
+            
+            updateConnections() {
+                // Reset all connections
+                this.vectors.forEach(v => {
+                    v.connected = false;
+                    v.connectedTo = null;
+                });
+                
+                // Check for connections
+                for (let i = 0; i < this.vectors.length; i++) {
+                    for (let j = 0; j < this.vectors.length; j++) {
+                        if (i === j) continue;
+                        
+                        const vector1 = this.vectors[i];
+                        const vector2 = this.vectors[j];
+                        const vector1End = this.getVectorEnd(vector1);
+                        
+                        const distance = Math.sqrt(
+                            (vector2.startX - vector1End.x) ** 2 + 
+                            (vector2.startY - vector1End.y) ** 2
+                        );
+                        
+                        if (distance < this.snapDistance) {
+                            vector1.connected = true;
+                            vector1.connectedTo = vector2.id;
+                            vector2.startX = vector1End.x;
+                            vector2.startY = vector1End.y;
+                        }
+                    }
+                }
+            }
+            
+            calculateResultant() {
+                if (this.vectors.length === 0) return null;
+                
+                // Check if all vectors are connected in a chain
+                const connectedChain = this.getConnectedChain();
+                if (connectedChain.length !== this.vectors.length) return null;
+                
+                // Calculate resultant from first vector tail to last vector tip
+                const firstVector = connectedChain[0];
+                const lastVector = connectedChain[connectedChain.length - 1];
+                const lastEnd = this.getVectorEnd(lastVector);
+                
+                const magnitude = Math.sqrt((lastEnd.x - firstVector.startX) ** 2 + (lastEnd.y - firstVector.startY) ** 2);
+                
+                return {
+                    startX: firstVector.startX,
+                    startY: firstVector.startY,
+                    endX: lastEnd.x,
+                    endY: lastEnd.y,
+                    magnitude: magnitude,
+                    angle: Math.atan2(lastEnd.y - firstVector.startY, lastEnd.x - firstVector.startX)
+                };
+            }
+            
+            getConnectedChain() {
+                if (this.vectors.length === 0) return [];
+                
+                const chain = [];
+                const used = new Set();
+                
+                // Find the first vector (one that isn't connected to by another)
+                let firstVector = null;
+                for (let vector of this.vectors) {
+                    let isConnectedTo = false;
+                    for (let other of this.vectors) {
+                        if (other.connectedTo === vector.id) {
+                            isConnectedTo = true;
+                            break;
+                        }
+                    }
+                    if (!isConnectedTo) {
+                        firstVector = vector;
+                        break;
+                    }
+                }
+                
+                if (!firstVector) return [];
+                
+                // Build the chain
+                let current = firstVector;
+                while (current && !used.has(current.id)) {
+                    chain.push(current);
+                    used.add(current.id);
+                    
+                    if (current.connected && current.connectedTo !== null) {
+                        current = this.vectors.find(v => v.id === current.connectedTo);
+                    } else {
+                        current = null;
+                    }
+                }
+                
+                return chain;
+            }
+            
+            draw() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+                
+                // Draw grid if enabled
+                if (this.showGrid) {
+                    this.drawGrid();
+                }
+                
+                // Draw vectors
+                this.vectors.forEach(vector => {
+                    this.drawVector(vector);
+                });
+                
+                // Draw resultant if all vectors are connected
+                const resultant = this.calculateResultant();
+                if (resultant) {
+                    this.drawResultant(resultant);
+                }
+                
+                this.updateUI();
+            }
+            
+            drawGrid() {
+                this.ctx.strokeStyle = '#e0e0e0';
+                this.ctx.lineWidth = 0.5;
+                
+                const gridSize = this.pixelsPerCm;
+                
+                // Draw grid lines
+                for (let x = 0; x <= this.width; x += gridSize) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, 0);
+                    this.ctx.lineTo(x, this.height);
+                    this.ctx.stroke();
+                }
+                
+                for (let y = 0; y <= this.height; y += gridSize) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, y);
+                    this.ctx.lineTo(this.width, y);
+                    this.ctx.stroke();
+                }
+                
+                // Add single "1cm" labels to show scale of one square
+                this.ctx.fillStyle = '#666';
+                this.ctx.font = '12px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                
+                // Label one horizontal square (bottom of first square)
+                this.ctx.fillText('1cm', gridSize / 2, this.height - 10);
+                
+                // Label one vertical square (right side of first square)  
+                this.ctx.save();
+                this.ctx.translate(10, gridSize / 2);
+                this.ctx.rotate(-Math.PI / 2);
+                this.ctx.fillText('1cm', 0, 0);
+                this.ctx.restore();
+                
+                // Reset text alignment
+                this.ctx.textAlign = 'left';
+                this.ctx.textBaseline = 'alphabetic';
+            }
+            
+            drawVector(vector) {
+                const magnitude = this.getVectorMagnitude(vector);
+                const endX = vector.startX + magnitude * Math.cos(vector.angle);
+                const endY = vector.startY + magnitude * Math.sin(vector.angle);
+                
+                // Draw vector line
+                this.ctx.strokeStyle = vector.color;
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.moveTo(vector.startX, vector.startY);
+                this.ctx.lineTo(endX, endY);
+                this.ctx.stroke();
+                
+                // Draw arrowhead
+                this.drawArrowhead(endX, endY, vector.angle, vector.color);
+                
+                // Draw tail circle (drag handle)
+                this.ctx.fillStyle = vector.color;
+                this.ctx.beginPath();
+                this.ctx.arc(vector.startX, vector.startY, 8, 0, 2 * Math.PI);
+                this.ctx.fill();
+                
+                // Draw white center for tail
+                this.ctx.fillStyle = 'white';
+                this.ctx.beginPath();
+                this.ctx.arc(vector.startX, vector.startY, 4, 0, 2 * Math.PI);
+                this.ctx.fill();
+                
+                // Draw label if enabled
+                if (this.showComponents) {
+                    this.ctx.fillStyle = vector.color;
+                    this.ctx.font = 'bold 16px Arial';
+                    this.ctx.fillText(`F${vector.id + 1}`, vector.startX - 15, vector.startY - 15);
+                }
+                
+                // Draw measurement based on display mode
+                if (this.displayMode === 'force') {
+                    const forceInN = Math.round(vector.forceInN);
+                    
+                    this.ctx.fillStyle = '#333';
+                    this.ctx.font = 'bold 12px Arial';
+                    const midX = vector.startX + (magnitude / 2) * Math.cos(vector.angle);
+                    const midY = vector.startY + (magnitude / 2) * Math.sin(vector.angle);
+                    
+                    // Background for text readability
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    const textWidth = this.ctx.measureText(`${forceInN}N`).width;
+                    this.ctx.fillRect(midX + 2, midY - 15, textWidth + 6, 16);
+                    
+                    this.ctx.fillStyle = '#333';
+                    this.ctx.fillText(`${forceInN}N`, midX + 5, midY - 5);
+                } else if (this.displayMode === 'length') {
+                    const lengthInCm = Math.round((magnitude / this.pixelsPerCm) * 10) / 10;
+                    
+                    this.ctx.fillStyle = '#333';
+                    this.ctx.font = 'bold 12px Arial';
+                    const midX = vector.startX + (magnitude / 2) * Math.cos(vector.angle);
+                    const midY = vector.startY + (magnitude / 2) * Math.sin(vector.angle);
+                    
+                    // Background for text readability
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    const textWidth = this.ctx.measureText(`${lengthInCm}cm`).width;
+                    this.ctx.fillRect(midX + 2, midY - 15, textWidth + 6, 16);
+                    
+                    this.ctx.fillStyle = '#333';
+                    this.ctx.fillText(`${lengthInCm}cm`, midX + 5, midY - 5);
+                }
+            }
+            
+            drawArrowhead(x, y, angle, color) {
+                const size = 15;
+                this.ctx.fillStyle = color;
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, y);
+                this.ctx.lineTo(
+                    x - size * Math.cos(angle - Math.PI / 6),
+                    y - size * Math.sin(angle - Math.PI / 6)
+                );
+                this.ctx.lineTo(
+                    x - size * Math.cos(angle + Math.PI / 6),
+                    y - size * Math.sin(angle + Math.PI / 6)
+                );
+                this.ctx.closePath();
+                this.ctx.fill();
+            }
+            
+            drawResultant(resultant) {
+                // Draw dashed line for resultant
+                this.ctx.setLineDash([10, 5]);
+                this.ctx.strokeStyle = '#ff1744';
+                this.ctx.lineWidth = 4;
+                this.ctx.beginPath();
+                this.ctx.moveTo(resultant.startX, resultant.startY);
+                this.ctx.lineTo(resultant.endX, resultant.endY);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+                
+                // Draw resultant arrowhead
+                this.drawArrowhead(resultant.endX, resultant.endY, resultant.angle, '#ff1744');
+                
+                // Label
+                this.ctx.fillStyle = '#ff1744';
+                this.ctx.font = 'bold 18px Arial';
+                const midX = (resultant.startX + resultant.endX) / 2;
+                const midY = (resultant.startY + resultant.endY) / 2;
+                this.ctx.fillText('R', midX + 10, midY - 10);
+                
+                // Measurement based on display mode
+                if (this.displayMode === 'force') {
+                    const lengthInCm = resultant.magnitude / this.pixelsPerCm;
+                    const forceInN = Math.round(lengthInCm * this.scale);
+                    
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    const textWidth = this.ctx.measureText(`${forceInN}N`).width;
+                    this.ctx.fillRect(midX + 8, midY + 2, textWidth + 6, 16);
+                    
+                    this.ctx.fillStyle = '#ff1744';
+                    this.ctx.font = 'bold 14px Arial';
+                    this.ctx.fillText(`${forceInN}N`, midX + 10, midY + 15);
+                } else if (this.displayMode === 'length') {
+                    const lengthInCm = Math.round((resultant.magnitude / this.pixelsPerCm) * 10) / 10;
+                    
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    const textWidth = this.ctx.measureText(`${lengthInCm}cm`).width;
+                    this.ctx.fillRect(midX + 8, midY + 2, textWidth + 6, 16);
+                    
+                    this.ctx.fillStyle = '#ff1744';
+                    this.ctx.font = 'bold 14px Arial';
+                    this.ctx.fillText(`${lengthInCm}cm`, midX + 10, midY + 15);
+                }
+            }
+            
+            updateUI() {
+                // Update vector count
+                document.getElementById('vectorCount').textContent = this.vectors.length;
+                
+                // Update add vector button
+                const addBtn = document.getElementById('addVector');
+                addBtn.disabled = this.vectors.length >= this.maxVectors;
+                
+                // Update vector list
+                const vectorList = document.getElementById('vectorList');
+                if (this.vectors.length === 0) {
+                    vectorList.innerHTML = '<p style="text-align: center; color: #888;">No vectors added yet</p>';
+                } else {
+                    vectorList.innerHTML = this.vectors.map(vector => {
+                        const magnitude = this.getVectorMagnitude(vector);
+                        const lengthInCm = Math.round((magnitude / this.pixelsPerCm) * 10) / 10;
+                        const forceInN = Math.round(vector.forceInN);
+                        const displayValue = this.displayMode === 'force' ? `${forceInN}N` : `${lengthInCm}cm`;
+                        
+                        return `
+                            <div class="vector-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="color-dot" style="background-color: ${vector.color}"></div>
+                                    F${vector.id + 1}
+                                </div>
+                                <div>${displayValue}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+                
+                // Update resultant info
+                const resultant = this.calculateResultant();
+                const resultantInfo = document.getElementById('resultantInfo');
+                if (resultant) {
+                    const lengthInCm = Math.round((resultant.magnitude / this.pixelsPerCm) * 10) / 10;
+                    const forceInN = Math.round(lengthInCm * this.scale);
+                    const angleDeg = Math.round(resultant.angle * 180 / Math.PI);
+                    
+                    const displayValue = this.displayMode === 'force' ? `${forceInN}N` : `${lengthInCm}cm`;
+                    
+                    resultantInfo.innerHTML = `
+                        <strong>Resultant Vector (R):</strong><br>
+                        Magnitude: ${displayValue}<br>
+                        Angle: ${angleDeg}°<br>
+                        <small style="color: #ccc;">All vectors connected!</small>
+                    `;
+                } else {
+                    const connectedCount = this.getConnectedChain().length;
+                    if (connectedCount > 0) {
+                        resultantInfo.innerHTML = `${connectedCount}/${this.vectors.length} vectors connected<br>Connect all vectors to see resultant`;
+                    } else {
+                        resultantInfo.innerHTML = 'Connect all vectors to see resultant';
+                    }
+                }
+            }
+        }
+        
+        // Initialize simulation when page loads
+        let simulation;
+        document.addEventListener('DOMContentLoaded', function() {
+            simulation = new VectorAdditionSimulation();
+        });
+    </script>
+</body>
+</html>
