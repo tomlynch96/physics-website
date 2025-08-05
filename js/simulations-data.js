@@ -167,6 +167,21 @@ class SimulationUtils {
             this.renderStandingWave(container, params);
             return;
         }
+
+        // In SimulationUtils.renderSimulation method
+        if (simulationId === 'vector-addition') {
+            container.innerHTML = '';
+            
+            const iframe = document.createElement('iframe');
+            iframe.src = '/physics-website/simulations/vector-addition.html';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.allowFullscreen = true;
+            
+            container.appendChild(iframe);
+            return;
+        }
         
         // For other simulations, create a placeholder with gradient based on category
         const gradients = {
