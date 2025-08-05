@@ -113,7 +113,7 @@ const SIMULATIONS_DATA = [
             { name: 'observer_velocity', label: 'Observer Velocity (m/s)', type: 'range', min: 0, max: 100, step: 5, default: 0 },
             { name: 'frequency', label: 'Source Frequency (Hz)', type: 'range', min: 100, max: 1000, step: 50, default: 440 }
         ]
-    }
+    },
 
     {
         id: 'vector-addition',
