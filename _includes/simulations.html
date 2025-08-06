@@ -616,110 +616,11 @@
                 const simulation = SimulationUtils.getById(simulationId);
                 if (!simulation) return;
 
-                const modalTitle = document.getElementById('modalTitle');
-                if (modalTitle) modalTitle.textContent = simulation.title;
-                
-                // Render simulation in modal
-                const modalContainerId = 'modalSimulationContainer';
-                const modalContainer = document.getElementById('simulationContainer');
-                if (modalContainer) {
-                    modalContainer.id = modalContainerId;
-                    SimulationUtils.renderSimulation(simulationId, modalContainerId);
-                }
-
-                // Generate controls
-                generateControls(simulation);
-                
-                // Generate embed code
-                const embedCode = SimulationUtils.generateEmbedCode(simulationId);
-                const embedCodeElement = document.getElementById('embedCode');
-                if (embedCodeElement) {
-                    embedCodeElement.textContent = embedCode;
-                }
-
-                // Show modal
-                const modal = document.getElementById('simulationModal');
-                if (modal) {
-                    modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
+                // Instead of modal, directly open the simulation HTML file in new tab
+                const simulationUrl = `/physics-website/simulations/${simulationId}.html`;
+                window.open(simulationUrl, '_blank');
             }
-
-            // Generate simulation controls
-            function generateControls(simulation) {
-                const controlsContainer = document.getElementById('simulationControls');
-                if (!controlsContainer) return;
-                
-                controlsContainer.innerHTML = '';
-
-                simulation.controls.forEach(control => {
-                    const controlGroup = document.createElement('div');
-                    controlGroup.className = 'control-group';
-
-                    let inputElement;
-                    if (control.type === 'range') {
-                        inputElement = `
-                            <input type="range" 
-                                   class="control-input" 
-                                   min="${control.min}" 
-                                   max="${control.max}" 
-                                   step="${control.step}" 
-                                   value="${control.default}"
-                                   oninput="updateSimulation('${simulation.id}', '${control.name}', this.value)">
-                            <div style="font-size: 12px; color: var(--text-secondary);">
-                                Value: <span id="${control.name}_value">${control.default}</span>
-                            </div>
-                        `;
-                    } else if (control.type === 'select') {
-                        inputElement = `
-                            <select class="control-input" onchange="updateSimulation('${simulation.id}', '${control.name}', this.value)">
-                                ${control.options.map(option => 
-                                    `<option value="${option}" ${option === control.default ? 'selected' : ''}>${option}</option>`
-                                ).join('')}
-                            </select>
-                        `;
-                    }
-
-                    controlGroup.innerHTML = `
-                        <label class="control-label">${control.label}</label>
-                        ${inputElement}
-                    `;
-
-                    controlsContainer.appendChild(controlGroup);
-                });
-            }
-
-            // Update simulation with new parameters
-            window.updateSimulation = function(simulationId, parameter, value) {
-                // Update the displayed value for range inputs
-                const valueDisplay = document.getElementById(`${parameter}_value`);
-                if (valueDisplay) {
-                    valueDisplay.textContent = value;
-                }
-
-                // Get current parameters from all controls
-                const simulation = SimulationUtils.getById(simulationId);
-                if (!simulation) return;
-
-                const params = {};
-                simulation.controls.forEach(control => {
-                    if (control.name === parameter) {
-                        params[control.name] = control.type === 'range' ? parseFloat(value) : value;
-                    } else {
-                        // Get current value from the control
-                        const controlElement = document.querySelector(`[oninput*="${control.name}"], [onchange*="${control.name}"]`);
-                        if (controlElement) {
-                            params[control.name] = control.type === 'range' ? parseFloat(controlElement.value) : controlElement.value;
-                        } else {
-                            params[control.name] = control.default;
-                        }
-                    }
-                });
-
-                // Re-render simulation with new parameters
-                SimulationUtils.renderSimulation(simulationId, 'modalSimulationContainer', params);
-            }
-
+            
             // Show embed code quickly
             window.showEmbedCode = function(simulationId) {
                 const embedCode = SimulationUtils.generateEmbedCode(simulationId);
