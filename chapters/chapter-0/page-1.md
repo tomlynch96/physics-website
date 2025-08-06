@@ -103,6 +103,50 @@ Add your main content here. This framework makes it easy to focus on writing whi
 
 You can also link to the full simulations browser: [View All Simulations](/physics-website/simulations/)
 
+<div class="practice-box">
+    <div class="practice-header">
+        <div class="practice-header-left">
+            <span class="practice-icon">📝</span>
+            <span class="practice-title">Practice Question</span>
+        </div>
+        <button class="toggle-solution" onclick="toggleSolution(this)">Show Solution</button>
+    </div>
+    <div class="practice-problem">
+        <strong>Problem:</strong> Calculate the momentum of a 5kg object moving at 10m/s
+    </div>
+    <div class="practice-solution" style="display: none;">
+        <strong>Solution:</strong>
+        <div class="solution-steps">
+            <div class="solution-step">
+                <strong>Step 1:</strong> Identify given information
+            </div>
+            <div class="solution-step">
+                <strong>• Mass:</strong> m = 5 kg
+            </div>
+            <div class="solution-step">
+                <strong>• Velocity:</strong> v = 10 m/s
+            </div>
+            <div class="solution-step">
+                <strong>• Momentum:</strong> p = ? (unknown)
+            </div>
+            <div class="solution-step">
+                <strong>Step 2:</strong> Choose appropriate equation
+            </div>
+            <div class="solution-step">
+                <strong>p = mv:</strong> 
+            </div>
+            <div class="solution-step">
+                <strong>Step 3:</strong> Substitute values and calculate
+            </div>
+            <div class="solution-step">
+                <strong>p = 5 × 10 = 50 kg⋅m/s:</strong> 
+            </div>
+        </div>
+        <div class="practice-answer">
+            <strong>Answer:</strong> The momentum is 50 kg⋅m/s
+        </div>
+    </div>
+</div>
 ---
 
 **Navigation:**
