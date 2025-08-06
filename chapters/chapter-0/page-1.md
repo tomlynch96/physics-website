@@ -149,9 +149,28 @@ You can also link to the full simulations browser: [View All Simulations](/physi
 </div>
 
 <script>
+<script>
 function toggleSolution(button) {
-    // Toggle functionality
+    const practiceBox = button.closest('.practice-box');
+    const solution = practiceBox.querySelector('.practice-solution');
+    
+    if (solution.style.display === 'none' || solution.style.display === '') {
+        solution.style.display = 'block';
+        button.textContent = 'Hide Solution';
+        
+        if (window.MathJax) {
+            MathJax.typesetPromise([solution]);
+        }
+        
+        setTimeout(() => {
+            solution.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    } else {
+        solution.style.display = 'none';
+        button.textContent = 'Show Solution';
+    }
 }
+</script>
 </script>
 ---
 
