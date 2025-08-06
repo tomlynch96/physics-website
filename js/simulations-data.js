@@ -73,6 +73,21 @@ const SIMULATIONS_DATA = [
         ]
     },
     {
+        id: 'vector-addition',
+        title: 'Vector Addition',
+        description: 'Interactive vector addition with drag-and-drop functionality. Adjust scale to fit vectors on paper.',
+        category: 'mechanics',
+        difficulty: 'beginner',
+        icon: '🧭',
+        featured: true,
+        controls: [
+            { name: 'scale', label: 'Scale (1cm = N)', type: 'range', min: 1, max: 100, step: 1, default: 10 },
+            { name: 'displayMode', label: 'Display Mode', type: 'select', options: ['force', 'length'], default: 'force' },
+            { name: 'showGrid', label: 'Show Grid', type: 'checkbox', default: true },
+            { name: 'showComponents', label: 'Show Labels', type: 'checkbox', default: true }
+        ]
+    },
+    {
         id: 'quantum-tunneling',
         title: 'Quantum Tunneling',
         description: 'Explore quantum mechanical tunneling through potential barriers.',
@@ -113,21 +128,6 @@ const SIMULATIONS_DATA = [
             { name: 'observer_velocity', label: 'Observer Velocity (m/s)', type: 'range', min: 0, max: 100, step: 5, default: 0 },
             { name: 'frequency', label: 'Source Frequency (Hz)', type: 'range', min: 100, max: 1000, step: 50, default: 440 }
         ]
-    },
-    {
-        id: 'vector-addition',
-        title: 'Vector Addition',
-        description: 'Interactive vector addition with drag-and-drop functionality. Adjust scale to fit vectors on paper.',
-        category: 'mechanics',
-        difficulty: 'beginner',
-        icon: '🧭',
-        featured: true,
-        controls: [
-            { name: 'scale', label: 'Scale (1cm = N)', type: 'range', min: 1, max: 100, step: 1, default: 10 },
-            { name: 'displayMode', label: 'Display Mode', type: 'select', options: ['force', 'length'], default: 'force' },
-            { name: 'showGrid', label: 'Show Grid', type: 'checkbox', default: true },
-            { name: 'showComponents', label: 'Show Labels', type: 'checkbox', default: true }
-        ]
     }
 ];
 
@@ -167,19 +167,10 @@ class SimulationUtils {
             this.renderStandingWave(container, params);
             return;
         }
-
-        // In SimulationUtils.renderSimulation method
+        
+        // Special handling for vector addition simulation
         if (simulationId === 'vector-addition') {
-            container.innerHTML = '';
-            
-            const iframe = document.createElement('iframe');
-            iframe.src = '/physics-website/simulations/vector-addition.html';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.border = 'none';
-            iframe.allowFullscreen = true;
-            
-            container.appendChild(iframe);
+            this.renderVectorAddition(container, params);
             return;
         }
         
@@ -207,6 +198,84 @@ class SimulationUtils {
                 <div style="font-size: 16px; opacity: 0.8; margin-top: 8px;">Interactive simulation ready</div>
             </div>
         `;
+    }
+    
+    static renderVectorAddition(container, params = {}) {
+        // Create wrapper for embedded simulation with controls
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.width = '100%';
+        wrapper.style.height = '100%';
+        wrapper.style.borderRadius = '8px';
+        wrapper.style.overflow = 'hidden';
+        wrapper.style.background = '#000';
+        
+        // Create iframe
+        const iframe = document.createElement('iframe');
+        iframe.src = '/physics-website/simulations/vector-addition.html?embedded=true';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.allowFullscreen = true;
+        
+        // Create overlay controls
+        const controls = document.createElement('div');
+        controls.style.position = 'absolute';
+        controls.style.top = '10px';
+        controls.style.right = '10px';
+        controls.style.display = 'flex';
+        controls.style.gap = '8px';
+        controls.style.zIndex = '10';
+        controls.style.opacity = '0.7';
+        controls.style.transition = 'opacity 0.3s ease';
+        
+        // Hover effect for controls
+        wrapper.addEventListener('mouseenter', () => {
+            controls.style.opacity = '1';
+        });
+        wrapper.addEventListener('mouseleave', () => {
+            controls.style.opacity = '0.7';
+        });
+        
+        // Expand button
+        const expandBtn = this.createControlButton('🔍', 'Enlarge', () => {
+            this.enlargeSimulation(iframe);
+        });
+        
+        // Fullscreen button
+        const fullscreenBtn = this.createControlButton('⛶', 'Fullscreen', () => {
+            this.enterFullscreen(wrapper);
+        });
+        
+        // New tab button
+        const newTabBtn = this.createControlButton('↗', 'Open in new tab', () => {
+            window.open('/physics-website/simulations/vector-addition.html', '_blank');
+        });
+        
+        controls.appendChild(expandBtn);
+        controls.appendChild(fullscreenBtn);
+        controls.appendChild(newTabBtn);
+        
+        wrapper.appendChild(iframe);
+        wrapper.appendChild(controls);
+        
+        // Clear container and add wrapper
+        container.innerHTML = '';
+        container.appendChild(wrapper);
+        
+        // Handle iframe loading and parameter passing
+        iframe.addEventListener('load', () => {
+            try {
+                if (Object.keys(params).length > 0) {
+                    iframe.contentWindow.postMessage({
+                        type: 'updateParams',
+                        params: params
+                    }, '*');
+                }
+            } catch (e) {
+                console.log('Could not send parameters to simulation iframe');
+            }
+        });
     }
     
     static renderStandingWave(container, params = {}) {
