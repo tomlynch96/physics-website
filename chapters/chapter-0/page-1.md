@@ -148,7 +148,7 @@ You can also link to the full simulations browser: [View All Simulations](/physi
     </div>
 </div>
 
-<script>
+
 <script>
 function toggleSolution(button) {
     const practiceBox = button.closest('.practice-box');
@@ -171,7 +171,7 @@ function toggleSolution(button) {
     }
 }
 </script>
-</script>
+
 ---
 
 **Navigation:**
